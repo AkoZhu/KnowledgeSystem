@@ -1,0 +1,3 @@
+# it works for both properties and yml. But you need a different format.
+#server:
+#  port: 8883
