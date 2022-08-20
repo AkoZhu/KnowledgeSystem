@@ -7,6 +7,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.core.env.Environment;
 
 
+
+// @SpringBootApplication contains @ComponentScan(), which scan all its sub package.
+// You can use @ComponentScan({"com.Ako", "com.xxx"}) when you want to add other packages.
+// @ComponentScan({"com.Ako", "com.xxx"})
 @SpringBootApplication
 public class WikiApplication {
 
