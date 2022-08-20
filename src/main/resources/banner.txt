@@ -1,0 +1,1 @@
+Message in banner.txt affects the starting picture. You can find String image and use it in this file.
