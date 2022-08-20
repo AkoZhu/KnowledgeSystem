@@ -1,5 +1,6 @@
 package com.Ako.wiki.controller;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,6 +10,13 @@ import java.util.Map;
 @RestController // Used when it returns a String.
 // @Controller // Used when it returns a web page
 public class TestController {
+
+
+    // Get value from config file.
+    @Value("${test.hello: TEST}") // Add the default value TEST
+                                  // if we can't find test.hello in config file.
+    private String testHello;
+
 
     /**
      * The usual http request methods are following four:
@@ -30,7 +38,7 @@ public class TestController {
     // @PostMapping("/hello")
     @GetMapping("/hello")
     public String hello(){
-        return "Hello World!";
+        return "Hello World!" + testHello;
     }
 
     @RequestMapping("/hello/post")
