@@ -1,3 +1,4 @@
 
-GET http://localhost:8080/ebook/list
+GET http://localhost:8080/ebook/list?name=Spring
+# It can map to the variable in request class. e.g. name will be mapped to EbookReq.name.
 ###
