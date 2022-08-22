@@ -1,11 +1,14 @@
 package com.Ako.wiki.controller;
 
+import com.Ako.wiki.domain.Test;
+import com.Ako.wiki.service.TestService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
+import javax.annotation.Resource;
+import java.util.List;
 
 @RestController // Used when it returns a String.
 // @Controller // Used when it returns a web page
@@ -17,6 +20,8 @@ public class TestController {
                                   // if we can't find test.hello in config file.
     private String testHello;
 
+    @Resource
+    private TestService testService;
 
     /**
      * The usual http request methods are following four:
@@ -45,4 +50,7 @@ public class TestController {
     public String helloPost(String name){
         return "Hello World! Post, " + name;
     }
+
+    @GetMapping("/test/list")
+    public List<Test> list() {return testService.list();}
 }

@@ -1,9 +1,11 @@
-package com.Ako.wiki;
+package com.Ako.wiki.config;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
 
 
@@ -12,6 +14,8 @@ import org.springframework.core.env.Environment;
 // You can use @ComponentScan({"com.Ako", "com.xxx"}) when you want to add other packages.
 // @ComponentScan({"com.Ako", "com.xxx"})
 @SpringBootApplication
+@MapperScan("com.Ako.wiki.mapper")
+@ComponentScan("com.Ako")
 public class WikiApplication {
 
 	private static final Logger LOG = LoggerFactory.getLogger(WikiApplication.class);
