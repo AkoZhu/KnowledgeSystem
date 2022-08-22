@@ -6,14 +6,12 @@ import com.Ako.wiki.mapper.EbookMapper;
 import com.Ako.wiki.req.EbookReq;
 import com.Ako.wiki.resp.EbookResp;
 import com.Ako.wiki.util.CopyUtil;
-import org.springframework.beans.BeanUtils;
+//import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 
-import static com.Ako.wiki.util.CopyUtil.copyList;
 
 @Service
 public class EbookService {
