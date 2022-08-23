@@ -37,23 +37,46 @@
       <a-layout-content
         :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
       >
-        Content
+        <!-- Content -->
+        <pre>
+{{ebooks}}
+{{ebooks2}}
+        </pre>
       </a-layout-content>
     </a-layout>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, onMounted, ref, reactive, toRef} from 'vue';
 import axios from 'axios';
 
 export default defineComponent({
   name: 'Home',
   setup(){
     console.log("setup");
-    // function (response) {} is the same as (response) => {}
-    axios.get("http://localhost:8080/ebook/list?name=Spring").then(function (response) {
-      console.log(response);
+    // Write the initialziation function in onMounted function (life-cycle funtion)
+    // If we write before onMounted, then sometimes it will attain before the website render
+    // all these elements, which gives some errors.  
+
+    // ref gives the reactive data that dynamic for ebook.
+    const ebooks = ref();
+    // Use reactive or ref. Both can help you get content. Need to use one of which in a project. 
+    // Easy to maintain. 
+    const ebooks1 = reactive({books:[]});
+    onMounted(() => {
+      console.log("onMounted");
+      // function (response) {} is the same as (response) => {}
+      axios.get("http://localhost:8080/ebook/list?name=Spring").then(function (response) {
+        const data = response.data;
+        ebooks.value = data.content
+        ebooks1.books = data.content;
+        console.log(response);
+      });
     })
+    return {
+      ebooks,
+      ebooks2: toRef(ebooks1, "books")
+    }
   }
 });
 </script>
