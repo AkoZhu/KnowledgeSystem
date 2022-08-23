@@ -19,7 +19,9 @@ insert into `ebook` (id, name, description) values (3, 'Python 入门教程', '�
 insert into `ebook` (id, name, description) values (4, 'Mysql 入门教程', '零基础入门 Mysql 开发，企业级应用开发最佳首选框架');
 insert into `ebook` (id, name, description) values (5, 'Oracle 入门教程', '零基础入门 Oracle 开发，企业级应用开发最佳首选框架');
 
-
+select * from `ebook`
+update ebook set cover = '/image/cover2.png' where id = 1
+update ebook set cover = '/image/cover1.png' where id = 2
 
 
 
