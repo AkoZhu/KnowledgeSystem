@@ -81,7 +81,7 @@ for (let i = 0; i < 23; i++) {
 export default defineComponent({
   name: 'Home',
   setup(){
-    console.log("setup");
+    // console.log("setup");
     // Write the initialziation function in onMounted function (life-cycle funtion)
     // If we write before onMounted, then sometimes it will attain before the website render
     // all these elements, which gives some errors.  
@@ -92,13 +92,14 @@ export default defineComponent({
     // Easy to maintain. 
     const ebooks1 = reactive({books:[]});
     onMounted(() => {
-      console.log("onMounted1112");
+      // console.log("onMounted1112");
       // function (response) {} is the same as (response) => {}
       axios.get("/ebook/list").then(function (response) {
         const data = response.data;
         ebooks.value = data.content
         ebooks1.books = data.content;
-        console.log(response);
+        // console.log(response); // We use axios.interseptor to print response.
+        // We also delete setup and onMounted log.  
       });
     })
     return {
