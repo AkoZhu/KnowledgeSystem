@@ -8,7 +8,6 @@ import com.Ako.wiki.resp.EbookResp;
 import com.Ako.wiki.util.CopyUtil;
 //import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -22,9 +21,7 @@ public class EbookService {
     public List<EbookResp> list(EbookReq req){
         EbookExample ebookExample = new EbookExample();
         EbookExample.Criteria criteria = ebookExample.createCriteria();
-        if (!ObjectUtils.isEmpty(req.getName())){
-            criteria.andNameLike("%"+ req.getName() + "%");
-        }
+        criteria.andNameLike("%"+ req.getName() + "%");
         List<Ebook> ebookList = ebookMapper.selectByExample(ebookExample);
 
 //        List<EbookResp> respList = new ArrayList<>();
