@@ -4,6 +4,7 @@ package com.Ako.wiki.controller;
 import com.Ako.wiki.req.EbookReq;
 import com.Ako.wiki.resp.CommonResp;
 import com.Ako.wiki.resp.EbookResp;
+import com.Ako.wiki.resp.PageResp;
 import com.Ako.wiki.service.EbookService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,8 +23,8 @@ public class EbookController {
     @GetMapping("/list") // we can change "/ebook/list" to "/list" since we add @RequestMapping("/ebook");
     public CommonResp list(EbookReq req) {
         // Don't let the whole information, the Ebook class show in Controller.
-        CommonResp<List<EbookResp>> resp = new CommonResp<>();
-        List<EbookResp> list = ebookService.list(req);
+        CommonResp<PageResp<EbookResp>> resp = new CommonResp<>();
+        PageResp<EbookResp> list = ebookService.list(req);
         resp.setContent(list);
         return resp;
     }

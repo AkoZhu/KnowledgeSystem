@@ -5,6 +5,7 @@ import com.Ako.wiki.domain.EbookExample;
 import com.Ako.wiki.mapper.EbookMapper;
 import com.Ako.wiki.req.EbookReq;
 import com.Ako.wiki.resp.EbookResp;
+import com.Ako.wiki.resp.PageResp;
 import com.Ako.wiki.util.CopyUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -26,7 +27,7 @@ public class EbookService {
 
     private static final Logger LOG = LoggerFactory.getLogger(EbookService.class);
 
-    public List<EbookResp> list(EbookReq req){
+    public PageResp<EbookResp> list(EbookReq req){
         EbookExample ebookExample = new EbookExample();
         EbookExample.Criteria criteria = ebookExample.createCriteria();
         if (!ObjectUtils.isEmpty(req.getName())) {
@@ -34,7 +35,7 @@ public class EbookService {
         }
         // Only in active for the first Select.
         // It is better to write PageHelper tightly with select method.
-        PageHelper.startPage(1, 3);
+        PageHelper.startPage(req.getPage(), req.getSize());
         List<Ebook> ebookList = ebookMapper.selectByExample(ebookExample);
         // If we use the second Select, then it fails to limit the page.
         // ebookList = ebookMapper.selectByExample(ebookExample);
@@ -54,8 +55,14 @@ public class EbookService {
 //            EbookResp ebookResp = CopyUtil.copy(ebook, EbookResp.class);
 //            respList.add(ebookResp);
 //        }
+        
         // -- Copy all list.
         List<EbookResp> list = CopyUtil.copyList(ebookList, EbookResp.class);
-        return list;
+        PageResp<EbookResp> pageResp = new PageResp<>();
+
+        pageResp.setTotal(pageInfo.getTotal());
+        pageResp.setList(list);
+        
+        return pageResp;
     }
 }
