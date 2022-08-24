@@ -146,10 +146,20 @@
       const modalLoading = ref(false);
       const handleModelOk = () => {
         modalLoading.value = true;
-        setTimeout(() => {
-          modalVisible.value = false;
-          modalLoading.value = false;
-        }, 2000);
+
+        axios.post("/ebook/save", ebook.value).then((response) => {
+          const data = response.data; // data = CommomResp
+          if(data.success){
+            modalVisible.value = false;
+            modalLoading.value = false;
+
+            // Reloading the list.
+            handleQuery({
+              page: pagination.value.current,
+              size: pagination.value.pageSize,
+            })
+          }
+        })
       };
 
       /**

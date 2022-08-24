@@ -1,12 +1,15 @@
 package com.Ako.wiki.controller;
 
 //import com.Ako.wiki.domain.Ebook;
-import com.Ako.wiki.req.EbookReq;
+import com.Ako.wiki.req.EbookQueryReq;
+import com.Ako.wiki.req.EbookSaveReq;
 import com.Ako.wiki.resp.CommonResp;
-import com.Ako.wiki.resp.EbookResp;
+import com.Ako.wiki.resp.EbookQueryResp;
 import com.Ako.wiki.resp.PageResp;
 import com.Ako.wiki.service.EbookService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,11 +24,19 @@ public class EbookController {
     private EbookService ebookService;
 
     @GetMapping("/list") // we can change "/ebook/list" to "/list" since we add @RequestMapping("/ebook");
-    public CommonResp list(EbookReq req) {
+    public CommonResp list(EbookQueryReq req) {
         // Don't let the whole information, the Ebook class show in Controller.
-        CommonResp<PageResp<EbookResp>> resp = new CommonResp<>();
-        PageResp<EbookResp> list = ebookService.list(req);
+        CommonResp<PageResp<EbookQueryResp>> resp = new CommonResp<>();
+        PageResp<EbookQueryResp> list = ebookService.list(req);
         resp.setContent(list);
+        return resp;
+    }
+
+    @PostMapping("/save")
+    public CommonResp save(@RequestBody EbookSaveReq req) {
+        // Don't let the whole information, the Ebook class show in Controller.
+        CommonResp resp = new CommonResp<>();
+        ebookService.save(req);
         return resp;
     }
 }

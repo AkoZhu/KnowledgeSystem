@@ -3,8 +3,9 @@ package com.Ako.wiki.service;
 import com.Ako.wiki.domain.Ebook;
 import com.Ako.wiki.domain.EbookExample;
 import com.Ako.wiki.mapper.EbookMapper;
-import com.Ako.wiki.req.EbookReq;
-import com.Ako.wiki.resp.EbookResp;
+import com.Ako.wiki.req.EbookQueryReq;
+import com.Ako.wiki.req.EbookSaveReq;
+import com.Ako.wiki.resp.EbookQueryResp;
 import com.Ako.wiki.resp.PageResp;
 import com.Ako.wiki.util.CopyUtil;
 import com.github.pagehelper.PageHelper;
@@ -27,7 +28,7 @@ public class EbookService {
 
     private static final Logger LOG = LoggerFactory.getLogger(EbookService.class);
 
-    public PageResp<EbookResp> list(EbookReq req){
+    public PageResp<EbookQueryResp> list(EbookQueryReq req){
         EbookExample ebookExample = new EbookExample();
         EbookExample.Criteria criteria = ebookExample.createCriteria();
         if (!ObjectUtils.isEmpty(req.getName())) {
@@ -57,12 +58,29 @@ public class EbookService {
 //        }
         
         // -- Copy all list.
-        List<EbookResp> list = CopyUtil.copyList(ebookList, EbookResp.class);
-        PageResp<EbookResp> pageResp = new PageResp<>();
+        List<EbookQueryResp> list = CopyUtil.copyList(ebookList, EbookQueryResp.class);
+        PageResp<EbookQueryResp> pageResp = new PageResp<>();
 
         pageResp.setTotal(pageInfo.getTotal());
         pageResp.setList(list);
         
         return pageResp;
+    }
+    /**
+     * 
+     * Save
+     *  
+    */
+    public void save(EbookSaveReq req){
+        // Save have two types: 1. Modify, 2. Add.
+        Ebook ebook = CopyUtil.copy(req, Ebook.class);
+        if(ObjectUtils.isEmpty(req.getId())){
+            // Add
+            ebookMapper.insert(ebook);
+        }else{
+            // Update
+            ebookMapper.updateByPrimaryKey(ebook);
+        }
+
     }
 }
