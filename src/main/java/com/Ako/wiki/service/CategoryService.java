@@ -33,7 +33,9 @@ public class CategoryService {
     public PageResp<CategoryQueryResp> list(CategoryQueryReq req){
         CategoryExample categoryExample = new CategoryExample();
         CategoryExample.Criteria criteria = categoryExample.createCriteria();
-
+        if (!ObjectUtils.isEmpty(req.getName())) {
+            criteria.andNameLike("%" + req.getName() + "%");
+        }
         // Only in active for the first Select.
         // It is better to write PageHelper tightly with select method.
         PageHelper.startPage(req.getPage(), req.getSize());
