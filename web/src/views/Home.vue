@@ -38,7 +38,9 @@
         :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
       >
         <!-- Content -->
-        <a-list item-layout="vertical" size="large" :grid= "{ gutter: 20, column: 3 }" :data-source="ebooks">
+        <a-list item-layout="vertical" size="large" 
+          :grid= "{ gutter: 20, column: 3 }" 
+          :data-source="ebooks">
           <template #renderItem="{ item }">
             <a-list-item key="item.name">
               <template #actions>
@@ -61,22 +63,22 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref, reactive, toRef} from 'vue';
+import { defineComponent, onMounted, ref} from 'vue';
 import axios from 'axios';
 
-const listData: any = [];
+// const listData: any = [];
 
-for (let i = 0; i < 23; i++) {
-  listData.push({
-    href: 'https://www.antdv.com/',
-    title: `ant design vue part ${i}`,
-    avatar: 'https://joeschmoe.io/api/v1/random',
-    description:
-      'Ant Design, a design language for background applications, is refined by Ant UED Team.',
-    content:
-      'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
-  });
-}
+// for (let i = 0; i < 23; i++) {
+//   listData.push({
+//     href: 'https://www.antdv.com/',
+//     title: `ant design vue part ${i}`,
+//     avatar: 'https://joeschmoe.io/api/v1/random',
+//     description:
+//       'Ant Design, a design language for background applications, is refined by Ant UED Team.',
+//     content:
+//       'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
+//   });
+// }
 
 export default defineComponent({
   name: 'Home',
@@ -90,22 +92,30 @@ export default defineComponent({
     const ebooks = ref();
     // Use reactive or ref. Both can help you get content. Need to use one of which in a project. 
     // Easy to maintain. 
-    const ebooks1 = reactive({books:[]});
+    // const ebooks1 = reactive({books:[]});
+    
+
+    
     onMounted(() => {
       // console.log("onMounted1112");
       // function (response) {} is the same as (response) => {}
-      axios.get("/ebook/list").then(function (response) {
+      axios.get("/ebook/list", {
+        params: {
+          page: 1,
+          size: 100
+        }
+      }).then(function (response) {
         const data = response.data;
-        ebooks.value = data.content
-        ebooks1.books = data.content;
+        ebooks.value = data.content.list;
+        // ebooks1.books = data.content.list;
         // console.log(response); // We use axios.interseptor to print response.
         // We also delete setup and onMounted log.  
       });
     })
     return {
       ebooks,
-      ebooks2: toRef(ebooks1, "books"),
-      listData,
+      // ebooks2: toRef(ebooks1, "books"),
+      // listData,
       pagination: {
         onChange: (page: any) => {
           console.log(page);
