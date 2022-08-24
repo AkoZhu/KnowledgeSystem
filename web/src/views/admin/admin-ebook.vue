@@ -62,7 +62,11 @@
       :confirm-loading="modalLoading"
       @ok="handleModelOk"
     >
-      <a-form :model="ebook" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
+      <a-form 
+        :model="ebook" 
+        :label-col="{ span: 6 }" 
+        :wrapper-col="{ span: 18 }"
+      >
         <a-form-item label="Cover">
           <a-input v-model:value= "ebook.cover" />
         </a-form-item>
@@ -86,6 +90,7 @@
   import { defineComponent, onMounted, ref } from 'vue';
   import axios from 'axios';
   import { message } from 'ant-design-vue';
+  import { Tool } from '@/util/tool';
 
 
   export default defineComponent({
@@ -203,7 +208,10 @@
      
       const edit = (record: any) =>{
         modalVisible.value = true;
-        ebook.value = record
+        // If you use
+        // ebook.value = record, it is a shallow copy. 
+        // Changing ebook causes changing of the record. 
+        ebook.value = Tool.copy(record);
       };
       /**
        *  Add 
