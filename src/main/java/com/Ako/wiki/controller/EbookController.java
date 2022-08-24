@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 
 
 @RestController // Used when it returns a String.
@@ -27,7 +28,7 @@ public class EbookController {
     private EbookService ebookService;
 
     @GetMapping("/list") // we can change "/ebook/list" to "/list" since we add @RequestMapping("/ebook");
-    public CommonResp list(EbookQueryReq req) {
+    public CommonResp list(@Valid EbookQueryReq req) {
         // Don't let the whole information, the Ebook class show in Controller.
         CommonResp<PageResp<EbookQueryResp>> resp = new CommonResp<>();
         PageResp<EbookQueryResp> list = ebookService.list(req);

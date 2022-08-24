@@ -1,9 +1,14 @@
 package com.Ako.wiki.req;
 
-public class PageReq {
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotNull;
 
+public class PageReq {
+    @NotNull(message="Page No. can't be null.")
     private int page;
     
+    @NotNull(message="The number of Ebooks per page can't be null.")
+    @Max(value = 1000, message="The number of Ebooks per page can't exceed 1000.")
     private int size;
 
     public void setSize(int size) {
@@ -17,7 +22,7 @@ public class PageReq {
     public int getSize() {
         return size;
     }
-    
+
     public int getPage() {
         return page;
     }

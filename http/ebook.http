@@ -1,4 +1,8 @@
 
-GET http://localhost:8080/ebook/list?page=1&size=4
+GET http://localhost:8080/ebook/list?page=1&size=1001
 # It can map to the variable in request class. e.g. name will be mapped to EbookReq.name.
+###
+
+POST http://localhost:8080/ebook/save
+Content-Type: application/json
 ###
