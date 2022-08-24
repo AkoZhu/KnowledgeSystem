@@ -17,7 +17,7 @@
           </template>
           <template v-slot:action="{ text, record }">
             <a-space size="small">
-              <a-button type="primary">
+              <a-button type="primary" @click="edit">
                 Edit
               </a-button>
               <a-button type="danger">
@@ -28,6 +28,15 @@
         </a-table>      
       </a-layout-content>
     </a-layout>
+
+    <a-modal
+      title="Ebooks form"
+      v-model:visible="modalVisible"
+      :confirm-loading="modalLoading"
+      @ok="handleModelOk"
+    >
+      <p>test</p>
+    </a-modal>
 </template>
 
 <script lang="ts">
@@ -115,6 +124,26 @@
         });
       };
 
+      // ----- Ebooks Form ------
+      const modalVisible = ref(false);
+      const modalLoading = ref(false);
+      const handleModelOk = () => {
+        modalLoading.value = true;
+        setTimeout(() => {
+          modalVisible.value = false;
+          modalLoading.value = false;
+        }, 2000);
+      };
+
+      /**
+       *  Edit 
+      */
+     
+     const edit = () =>{
+      modalVisible.value = true;
+     };
+
+
       onMounted(() => {
         handleQuery({
           page: 1,
@@ -127,7 +156,12 @@
         pagination,
         columns,
         loading,
-        handleTableChange
+        handleTableChange,
+
+        edit,
+        modalVisible,
+        modalLoading,
+        handleModelOk
       }
     }
   });
