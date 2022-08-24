@@ -35,7 +35,7 @@
           <template #cover="{ text: cover }">
             <img v-if="cover" :src="cover" alt="avatar" />
           </template>
-          <template v-slot:action="{ text, record }">
+          <template v-slot:action="{ text: record }">
             <a-space size="small">
               <a-button type="primary" @click="edit(record)">
                 Edit
