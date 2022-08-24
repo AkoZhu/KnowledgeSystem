@@ -6,6 +6,11 @@ import com.Ako.wiki.mapper.EbookMapper;
 import com.Ako.wiki.req.EbookReq;
 import com.Ako.wiki.resp.EbookResp;
 import com.Ako.wiki.util.CopyUtil;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 //import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -19,14 +24,25 @@ public class EbookService {
     @Resource
     private EbookMapper ebookMapper;
 
+    private static final Logger LOG = LoggerFactory.getLogger(EbookService.class);
+
     public List<EbookResp> list(EbookReq req){
         EbookExample ebookExample = new EbookExample();
         EbookExample.Criteria criteria = ebookExample.createCriteria();
         if (!ObjectUtils.isEmpty(req.getName())) {
             criteria.andNameLike("%" + req.getName() + "%");
         }
+        // Only in active for the first Select.
+        // It is better to write PageHelper tightly with select method.
+        PageHelper.startPage(1, 3);
         List<Ebook> ebookList = ebookMapper.selectByExample(ebookExample);
+        // If we use the second Select, then it fails to limit the page.
+        // ebookList = ebookMapper.selectByExample(ebookExample);
 
+        // It gives total Row nums and page number. 
+        PageInfo<Ebook> pageInfo = new PageInfo(ebookList);
+        LOG.info("Total Lines Num: {}", pageInfo.getTotal());
+        LOG.info("Total Page Num: {}", pageInfo.getPages());
 //        List<EbookResp> respList = new ArrayList<>();
 //        for (Ebook ebook : ebookList) {
 //            //  EbookResp ebookResp = new EbookResp();
