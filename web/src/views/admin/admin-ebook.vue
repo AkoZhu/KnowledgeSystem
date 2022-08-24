@@ -25,9 +25,16 @@
               <a-button type="primary" @click="edit(record)">
                 Edit
               </a-button>
-              <a-button type="danger">
-                Delete
-              </a-button>
+              <a-popconfirm
+                title="Are you sure delete this Ebook?"
+                ok-text="Yes"
+                cancel-text="No"
+                @confirm="handleDelete(record.id)"
+              >
+                <a-button type="danger">
+                  Delete
+                </a-button>
+              </a-popconfirm>
             </a-space>
           </template>
         </a-table>      
@@ -54,7 +61,7 @@
           <a-input v-model:value="ebook.category2Id" />
         </a-form-item>
         <a-form-item label="Description">
-          <a-input v-model:value="ebook.desc" type="textarea" />
+          <a-input v-model:value="ebook.description" type="textarea" />
         </a-form-item>
       </a-form>
     </a-modal>
@@ -184,6 +191,22 @@
         ebook.value = {}
       };
 
+      /**
+       * Delete 
+      */
+      const handleDelete = (id: number) =>{
+        axios.delete("ebook/delete/" + id).then((response)=>{
+          const data = response.data; // data = commonResp
+          if(data.success){
+            // Reload the Ebook list.
+            handleQuery({
+              page:pagination.value.current,
+              size:pagination.value.pageSize,
+            })
+          }
+        });
+      };
+
 
       onMounted(() => {
         handleQuery({
@@ -201,6 +224,7 @@
 
         edit,
         add,
+        handleDelete,
 
         ebook,
         modalVisible,
