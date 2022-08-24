@@ -8,6 +8,7 @@ import com.Ako.wiki.req.EbookSaveReq;
 import com.Ako.wiki.resp.EbookQueryResp;
 import com.Ako.wiki.resp.PageResp;
 import com.Ako.wiki.util.CopyUtil;
+import com.Ako.wiki.util.SnowFlake;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
@@ -25,6 +26,9 @@ import java.util.List;
 public class EbookService {
     @Resource
     private EbookMapper ebookMapper;
+
+    @Resource
+    private SnowFlake snowFlake;
 
     private static final Logger LOG = LoggerFactory.getLogger(EbookService.class);
 
@@ -76,6 +80,7 @@ public class EbookService {
         Ebook ebook = CopyUtil.copy(req, Ebook.class);
         if(ObjectUtils.isEmpty(req.getId())){
             // Add
+            ebook.setId(snowFlake.nextId());
             ebookMapper.insert(ebook);
         }else{
             // Update
