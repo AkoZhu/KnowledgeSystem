@@ -5,9 +5,24 @@
       >
         <!-- Content -->
         <p>
-          <a-button type="primary" @click="add()" size="large">
-            Add Ebook Item
-          </a-button>
+          <a-form layout="inline" :model="param">
+            <a-form-item>
+              <a-input v-model:value="param.name" placeholder="Name"></a-input>
+            </a-form-item>
+            <a-form-item>
+              <a-button
+                type="primary"
+                @click="handleQuery({page: 1, size: pagination.pageSize})"
+              >
+                Search
+              </a-button>
+            </a-form-item>
+            <a-form-item>
+              <a-button type="primary" @click="add()">
+                Add a Ebook 
+              </a-button>
+            </a-form-item>
+          </a-form>
         </p>
         <a-table
           :columns="columns"
@@ -72,6 +87,7 @@
   import axios from 'axios';
   import { message } from 'ant-design-vue';
 
+
   export default defineComponent({
     name: 'AdminEbook',
     setup() {
@@ -129,7 +145,8 @@
         axios.get("/ebook/list", {
             params: {
               page: params.page,
-              size: params.size
+              size: params.size,
+              name: param.value.name,
             }
           }).then((response) => {
             loading.value = false;
@@ -213,6 +230,14 @@
         });
       };
 
+      /**
+       * Search bar
+       * 
+      */
+      const param = ref();
+      param.value = {};
+
+
 
       onMounted(() => {
         handleQuery({
@@ -235,7 +260,10 @@
         ebook,
         modalVisible,
         modalLoading,
-        handleModelOk
+        handleModelOk,
+
+        param,
+        handleQuery
       }
     }
   });
