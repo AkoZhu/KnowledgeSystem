@@ -4,11 +4,11 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 
 public class PageReq {
-    @NotNull(message="Page No. can't be null.")
+    @NotNull(message="[Page No.] can't be null.")
     private int page;
     
-    @NotNull(message="The number of Ebooks per page can't be null.")
-    @Max(value = 1000, message="The number of Ebooks per page can't exceed 1000.")
+    @NotNull(message="The number of Ebooks per page [size] can't be null.")
+    @Max(value = 1000, message="The number of Ebooks per page [size] can't exceed 1000.")
     private int size;
 
     public void setSize(int size) {
