@@ -91,11 +91,12 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, onMounted, ref } from 'vue';
+  import { defineComponent, onMounted, ref, createVNode} from 'vue';
   import axios from 'axios';
-  import { message } from 'ant-design-vue';
+  import { message, Modal } from 'ant-design-vue';
   import { Tool } from '@/util/tool';
   import { useRoute } from 'vue-router';
+  import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
 
 
   export default defineComponent({
@@ -246,7 +247,8 @@
       }
      }
 
-      const ids: Array<String> = [];
+      const deleteIds: Array<String> = [];
+      const deleteNames: Array<string> = [];
 
       /**
        *  Check
@@ -260,7 +262,8 @@
           // If the current node is the target node.
           console.log("deleted:", node);
           // Put target id into idlist.
-          ids.push(id);
+          deleteIds.push(id);
+          deleteNames.push(node.name);
 
           // Iterate all its children. 
           const children = node.children;
@@ -317,18 +320,30 @@
       /**
        * Delete 
       */
+
       const handleDelete = (id: number) =>{
         // console.log("level1.value:", level1.value, id);
         getDeleteIds(level1.value, id);
         // console.log("ids: ", ids);
-        axios.delete("doc/delete/" + ids.join(",")).then((response)=>{
-          const data = response.data; // data = commonResp
-          if(data.success){
-            // Reload the Doc list.
-            handleQuery()
-          }
-        });
+        Modal.confirm({
+          title: 'Do you want to delete these items?',
+          icon: createVNode(ExclamationCircleOutlined),
+          content: 'Will delete: [' + deleteNames.join(",") + ']. Do you really want to delete?',
+          onOk() {
+            axios.delete("doc/delete/" + deleteIds.join(",")).then((response)=>{
+              const data = response.data; // data = commonResp
+              if(data.success){
+                // Reload the Doc list.
+                handleQuery();
+              }
+            });
+          },
+        })
       };
+
+
+
+
 
       /**
        * Search bar
@@ -363,6 +378,7 @@
         handleQuerySearch,
 
         treeSelectData,
+
       }
     }
   });
