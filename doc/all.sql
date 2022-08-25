@@ -72,3 +72,26 @@ insert into `category` (id, parent, name, sort) values (502, 500, '开发工具'
 insert into `category` (id, parent, name, sort) values (503, 500, '热门服务端语言', 503);
 
 select * from `category`
+
+
+
+drop table if exists `doc`;
+create table `doc` (
+    `id` bigint not null comment 'id',
+    `ebook_id` bigint not null default 0 comment 'Ebook id',
+    `parent` bigint not null default 0 comment 'Parent id',
+    `name` varchar(50) not null comment 'Name',
+    `sort` int comment 'Order',
+    `view_count` int default 0 comment 'View count',
+    `vote_count` int default 0 comment 'Like count',
+    primary key(`id`)
+) engine=innodb default charset= utf8mb4 comment='document';
+
+insert into `doc` (id, ebook_id, parent, name, sort, view_count, vote_count) values (1, 1, 0, 'Document1', 1, 0, 0)
+insert into `doc` (id, ebook_id, parent, name, sort, view_count, vote_count) values (2, 1, 1, 'Document1.1', 1, 0, 0);
+insert into `doc` (id, ebook_id, parent, name, sort, view_count, vote_count) values (3, 1, 0, 'Document2', 2, 0, 0);
+insert into `doc` (id, ebook_id, parent, name, sort, view_count, vote_count) values (4, 1, 3, 'Document2.1', 1, 0, 0);
+insert into `doc` (id, ebook_id, parent, name, sort, view_count, vote_count) values (5, 1, 3, 'Document2.2', 2, 0, 0);
+insert into `doc` (id, ebook_id, parent, name, sort, view_count, vote_count) values (6, 1, 5, 'Document2.2.1', 1, 0, 0);
+
+select * from `doc`

@@ -44,6 +44,7 @@
         <!-- Default domainObjectName is the same as the table name with the capital for the first letter-->
 <!--        <table tableName="demo" domainObjectName="Demo"/>-->
 <!--        <table tableName="ebook" domainObjectName="Ebook"/>-->
-        <table tableName="category" domainObjectName="Category"/>
+<!--        <table tableName="category" domainObjectName="Category"/>-->
+        <table tableName="doc" domainObjectName="Doc"/>
     </context>
 </generatorConfiguration>
