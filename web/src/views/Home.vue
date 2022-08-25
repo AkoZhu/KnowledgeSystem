@@ -112,22 +112,14 @@ export default defineComponent({
     };
 
     const isWelcome = ref(true);
+    let categoryId2 = 0;
 
-    const handleClick = (value: any) => {
-      console.log("menu click", value)
-      isWelcome.value = value.key === "welcome";
-    };
-
-
-    
-    onMounted(() => {
-      handleQueryCategory();
-      // console.log("onMounted1112");
-      // function (response) {} is the same as (response) => {}
+    const handleQueryEbook = () => {
       axios.get("/ebook/list", {
         params: {
           page: 1,
-          size: 100
+          size: 100,
+          categoryId2: categoryId2
         }
       }).then(function (response) {
         const data = response.data;
@@ -136,6 +128,24 @@ export default defineComponent({
         // console.log(response); // We use axios.interseptor to print response.
         // We also delete setup and onMounted log.  
       });
+    };
+
+    const handleClick = (value: any) => {
+      console.log("menu click", value)
+      if(value.key === "welcome"){
+        isWelcome.value = true;
+      }else{
+        categoryId2 = value.key;
+        isWelcome.value = false;
+        handleQueryEbook();
+      }
+    };
+
+    
+    onMounted(() => {
+      handleQueryCategory();
+      // console.log("onMounted1112");
+      // function (response) {} is the same as (response) => {}
     })
     return {
       ebooks,

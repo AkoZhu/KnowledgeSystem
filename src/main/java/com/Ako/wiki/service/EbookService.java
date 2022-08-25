@@ -38,6 +38,9 @@ public class EbookService {
         if (!ObjectUtils.isEmpty(req.getName())) {
             criteria.andNameLike("%" + req.getName() + "%");
         }
+        if (!ObjectUtils.isEmpty(req.getCategoryId2())) {
+            criteria.andCategory2IdEqualTo(req.getCategoryId2());
+        }
         // Only in active for the first Select.
         // It is better to write PageHelper tightly with select method.
         PageHelper.startPage(req.getPage(), req.getSize());
