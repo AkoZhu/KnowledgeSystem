@@ -149,6 +149,7 @@ public class DocExample {
             return (Criteria) this;
         }
 
+
         public Criteria andIdNotIn(List<Long> values) {
             addCriterion("id not in", values, "id");
             return (Criteria) this;
@@ -539,6 +540,7 @@ public class DocExample {
         protected Criteria() {
             super();
         }
+
     }
 
     public static class Criterion {

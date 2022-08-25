@@ -8,10 +8,14 @@ import com.Ako.wiki.resp.DocQueryResp;
 import com.Ako.wiki.resp.CommonResp;
 import com.Ako.wiki.resp.PageResp;
 import com.Ako.wiki.service.DocService;
+
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -48,11 +52,15 @@ public class DocController {
         return resp;
     }
 
-    @DeleteMapping("/delete/{id}")
-    public CommonResp delete(@PathVariable Long id) {
+    @DeleteMapping("/delete/{idsStr}")
+    public CommonResp delete(@PathVariable String idsStr) {
         // Don't let the whole information, the Doc class show in Controller.
         CommonResp resp = new CommonResp<>();
-        docService.delete(id);
+        if(!ObjectUtils.isEmpty(idsStr)){
+            List<String> list = Arrays.asList(idsStr.split(","));
+            docService.delete(list);
+        }
         return resp;
     }
+
 }

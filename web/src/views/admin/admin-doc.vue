@@ -246,6 +246,39 @@
       }
      }
 
+      const ids: Array<String> = [];
+
+      /**
+       *  Check
+      */
+     const getDeleteIds = (treeSelectData: any, id: any) => {
+      // console.log(treeSelectData, id);
+      // Iterate all array
+      for(let i = 0; i < treeSelectData.length; i++){
+        const node = treeSelectData[i];
+        if(node.id === id){
+          // If the current node is the target node.
+          console.log("deleted:", node);
+          // Put target id into idlist.
+          ids.push(id);
+
+          // Iterate all its children. 
+          const children = node.children;
+          if(Tool.isNotEmpty(children)){
+            for(let j = 0; j < children.length; j++){
+              getDeleteIds(children, children[j].id);
+            }
+          }
+        }else {
+            // If current node is a target, find other nodes. 
+            const children = node.children;
+            if (Tool.isNotEmpty(children)) {
+              getDeleteIds(children, id);
+            }
+        }
+      }
+     }
+
 
       /**
        *  Edit 
@@ -285,7 +318,10 @@
        * Delete 
       */
       const handleDelete = (id: number) =>{
-        axios.delete("doc/delete/" + id).then((response)=>{
+        // console.log("level1.value:", level1.value, id);
+        getDeleteIds(level1.value, id);
+        // console.log("ids: ", ids);
+        axios.delete("doc/delete/" + ids.join(",")).then((response)=>{
           const data = response.data; // data = commonResp
           if(data.success){
             // Reload the Doc list.
