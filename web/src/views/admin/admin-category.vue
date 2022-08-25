@@ -27,7 +27,7 @@
         <a-table
           :columns="columns"
           :row-key="record => record.id"
-          :data-source="categorys"
+          :data-source="level1"
           :loading="loading"
           :pagination="false"
         >
@@ -112,6 +112,21 @@
           slots: { customRender: 'action' }
         }
       ];
+      /**
+       * Level 1 Category tree, children property is the second level.
+       * [{
+       *    id: "",
+       *    name: "",
+       *    children: [{
+       *        id: "",
+       *        name: "",
+       *        children:[]
+       *         }]
+       * }]
+       * 
+      */
+      const level1 = ref();// Level 1 Category tree. Children property is the second level.
+
 
       /**
        * 数据查询
@@ -124,6 +139,11 @@
             const data = response.data;
             if(data.success){
               categorys.value = data.content;
+              console.log("Original Data:", category.value);
+
+              level1.value = [];
+              level1.value = Tool.array2Tree(categorys.value, 0);
+              console.log("Tree Structure:", level1);
             }else{
               message.error(data.message);
             }
@@ -145,6 +165,10 @@
             const data = response.data;
             if(data.success){
               categorys.value = data.content.list;
+
+              level1.value = [];
+              level1.value = Tool.array2Tree(categorys.value, 0);
+              console.log("Tree Structure:", level1);             
             }else{
               message.error(data.message);
             }
@@ -220,7 +244,8 @@
       });
 
       return {
-        categorys,
+        // categorys,
+        level1,
         columns,
         loading,
 
