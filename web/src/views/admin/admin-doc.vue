@@ -70,6 +70,20 @@
           <a-input v-model:value="doc.name" />
         </a-form-item>
         <a-form-item label="Parent Doc">
+            <a-tree-select
+              v-model:value="doc.parent"
+              show-search
+              style="width: 100%"
+              :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+              placeholder="Please select a parent Doc"
+              allow-clear
+              tree-default-expand-all
+              :tree-data="treeSelectData"
+              :fieldNames="{label:'name', key:'id', value:'id'}"
+            >
+            </a-tree-select>
+        </a-form-item>
+        <a-form-item label="Parent Doc">
           <a-select
             ref="select"
             v-model:value="doc.parent"
@@ -190,6 +204,11 @@
 
 
       // ----- Docs Form ------
+      // Because the property state of the tree selection component 
+      // will change (disabled) with the node of the currently edited book, 
+      // declare a reactive variable separately. 
+      const treeSelectData = ref();
+      treeSelectData.value = [];
       const doc = ref();
       const modalVisible = ref(false);
       const modalLoading = ref(false);
@@ -211,6 +230,37 @@
       };
 
       /**
+       *  Set a node and its children as disabled.
+      */
+     const setDisabled = (treeSelectData: any, id: any) => {
+      // console.log(treeSelectData, id);
+      // Iterate all array
+      for(let i = 0; i < treeSelectData.length; i++){
+        const node = treeSelectData[i];
+        if(node.id === id){
+          // If the current node is the target node.
+          console.log("disabled", node);
+          node.disabled = true;
+
+          // Iterate all its children. 
+          const children = node.children;
+          if(Tool.isNotEmpty(children)){
+            for(let j = 0; j < children.length; j++){
+              setDisabled(children, children[j].id);
+            }
+          }
+        }else {
+            // If current node is a target, find other nodes. 
+            const children = node.children;
+            if (Tool.isNotEmpty(children)) {
+              setDisabled(children, id);
+            }
+        }
+      }
+     }
+
+
+      /**
        *  Edit 
       */
      
@@ -220,6 +270,13 @@
         // doc.value = record, it is a shallow copy. 
         // Changing doc causes changing of the record. 
         doc.value = Tool.copy(record);
+
+        // Can't select the children of the current node as its parent.
+        treeSelectData.value = Tool.copy(level1.value);
+        setDisabled(treeSelectData.value, record.id);
+
+        // Add the Null in tree;
+        treeSelectData.value.unshift({id: 0, name: 'Null'});
       };
       /**
        *  Add 
@@ -227,7 +284,12 @@
       */
       const add = () =>{
         modalVisible.value = true;
-        doc.value = {}
+        doc.value = {};
+
+        treeSelectData.value = Tool.copy(level1.value);
+
+        // Add a Null as parent.
+        treeSelectData.value.unshift({id: 0, name: 'Null'});
       };
 
       /**
@@ -273,7 +335,9 @@
 
         param,
         handleQuery,
-        handleQuerySearch
+        handleQuerySearch,
+
+        treeSelectData,
       }
     }
   });
