@@ -263,6 +263,13 @@
             level1.value = [];
             level1.value = Tool.array2Tree(categorys, 0);
             console.log("树形结构：", level1.value);
+
+            // After loading the Category, we load ebooks. Otherwise if the category
+            // loads slowly, ebooks render would get error. 
+            handleQuery({
+              page: 1,
+              size: pagination.value.pageSize
+            });
           } else {
             message.error(data.message);
           }
@@ -290,10 +297,6 @@
 
       onMounted(() => {
         handleQueryCategory();
-        handleQuery({
-          page: 1,
-          size: pagination.value.pageSize
-        });
       });
 
       return {
