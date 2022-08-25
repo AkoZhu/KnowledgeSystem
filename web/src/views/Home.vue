@@ -4,13 +4,11 @@
         <a-menu
           mode="inline"
           :style="{ height: '100%', borderRight: 0 }"
-          @click="handleClick()"
+          @click="handleClick"
         >
-          <a-menu-item key="Welcome">
-            <router-link :to="'/'">
-              <MailOutlined />
-              <span>Welcome</span>
-            </router-link>
+          <a-menu-item key="welcome">
+            <MailOutlined/>
+            <span>Welcome</span>
           </a-menu-item>
           <a-sub-menu v-for="item in level1" :key="item.id">
             <template v-slot:title>
@@ -26,9 +24,16 @@
         :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
       >
         <!-- Content -->
-        <a-list item-layout="vertical" size="large" 
+        <div class="welcome" v-show="isWelcome">
+          <h1>Welcome to Ebook Wiki!!</h1>
+        </div>
+        <a-list 
+          v-show="!isWelcome"
+          item-layout="vertical" 
+          size="large" 
           :grid= "{ gutter: 20, column: 3 }" 
-          :data-source="ebooks">
+          :data-source="ebooks"
+        >
           <template #renderItem="{ item }">
             <a-list-item key="item.name">
               <template #actions>
@@ -106,10 +111,12 @@ export default defineComponent({
       });
     };
 
-    const handleClick = () => {
-      console.log("menu click")
-    };
+    const isWelcome = ref(true);
 
+    const handleClick = (value: any) => {
+      console.log("menu click", value)
+      isWelcome.value = value.key === "welcome";
+    };
 
 
     
@@ -148,6 +155,8 @@ export default defineComponent({
 
       handleClick,
       level1,
+
+      isWelcome,
     }
   }
 });
