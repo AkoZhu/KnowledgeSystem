@@ -30,9 +30,24 @@ public class CategoryService {
 
     private static final Logger LOG = LoggerFactory.getLogger(CategoryService.class);
 
+    public List<CategoryQueryResp> all(){
+        CategoryExample categoryExample = new CategoryExample();
+        categoryExample.setOrderByClause("sort asc");
+        // While condition 
+        // CategoryExample.Criteria criteria = categoryExample.createCriteria();
+        List<Category> categoryList = categoryMapper.selectByExample(categoryExample);
+        
+        // List copy
+        List<CategoryQueryResp> list = CopyUtil.copyList(categoryList, CategoryQueryResp.class);
+        return list;
+    }
+
+
+
     public PageResp<CategoryQueryResp> list(CategoryQueryReq req){
         CategoryExample categoryExample = new CategoryExample();
         CategoryExample.Criteria criteria = categoryExample.createCriteria();
+        categoryExample.setOrderByClause("sort asc");
         if (!ObjectUtils.isEmpty(req.getName())) {
             criteria.andNameLike("%" + req.getName() + "%");
         }

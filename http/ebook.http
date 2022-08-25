@@ -7,6 +7,6 @@ POST http://localhost:8080/ebook/save
 Content-Type: application/json
 ###
 
-GET http://localhost:8080/category/list?name=前端&page=1&size=2
+GET http://localhost:8080/category/list?name=Vue
 # It can map to the variable in request class. e.g. name will be mapped to EbookReq.name.
 ###

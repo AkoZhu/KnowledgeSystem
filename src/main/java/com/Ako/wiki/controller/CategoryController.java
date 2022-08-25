@@ -10,6 +10,8 @@ import com.Ako.wiki.resp.PageResp;
 import com.Ako.wiki.service.CategoryService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 import javax.validation.Valid;
 
@@ -20,6 +22,15 @@ public class CategoryController {
 
     @Resource
     private CategoryService categoryService;
+
+    @GetMapping("/all") // we can change "/category/list" to "/list" since we add @RequestMapping("/category");
+    public CommonResp all() {
+        // Don't let the whole information, the Category class show in Controller.
+        CommonResp<List<CategoryQueryResp>> resp = new CommonResp<>();
+        List<CategoryQueryResp> list = categoryService.all();
+        resp.setContent(list);
+        return resp;
+    }
 
     @GetMapping("/list") // we can change "/category/list" to "/list" since we add @RequestMapping("/category");
     public CommonResp list(@Valid CategoryQueryReq req) {
