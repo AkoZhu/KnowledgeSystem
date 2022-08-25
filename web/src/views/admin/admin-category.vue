@@ -82,8 +82,6 @@
             >
                 {{c.name}}
             </a-select-option>
-            <a-select-option value="disabled" disabled>Disabled</a-select-option>
-            <a-select-option value="Yiminghe">yiminghe</a-select-option>
           </a-select>
 
         </a-form-item>
@@ -192,7 +190,7 @@
 
 
       // ----- Categorys Form ------
-      const category = ref({});
+      const category = ref();
       const modalVisible = ref(false);
       const modalLoading = ref(false);
       const handleModelOk = () => {
