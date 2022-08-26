@@ -63,4 +63,13 @@ public class DocController {
         return resp;
     }
 
+    @GetMapping("/file-content/{id}") // we can change "/doc/list" to "/list" since we add @RequestMapping("/doc");
+    public CommonResp fileContent(@PathVariable Long id) {
+        // Don't let the whole information, the Doc class show in Controller.
+        CommonResp<String> resp = new CommonResp<>();
+        String content = docService.fileContent(id);
+        resp.setContent(content);
+        return resp;
+    }
+
 }

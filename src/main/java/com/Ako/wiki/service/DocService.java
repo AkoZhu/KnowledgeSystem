@@ -50,7 +50,11 @@ public class DocService {
     }
 
 
-
+    /**
+     * 
+     *  Query a list of books
+     * 
+    */
     public PageResp<DocQueryResp> list(DocQueryReq req){
         DocExample docExample = new DocExample();
         DocExample.Criteria criteria = docExample.createCriteria();
@@ -131,5 +135,13 @@ public class DocService {
         }
         criteria.andIdIn(idsList);
         docMapper.deleteByExample(docExample);
+    }
+
+
+
+    public String fileContent(Long id){
+        Content content = contentMapper.selectByPrimaryKey(id);
+        if(content == null) return null;
+        return content.getContent();
     }
 }

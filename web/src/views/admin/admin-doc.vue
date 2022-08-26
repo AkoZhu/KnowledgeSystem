@@ -9,9 +9,6 @@
             <p>
               <a-form layout="inline" :model="param">
                 <a-form-item>
-                  <a-input v-model:value="param.name" placeholder="Name"></a-input>
-                </a-form-item>
-                <a-form-item>
                   <a-button
                     type="primary"
                     @click="handleQuerySearch(param)"
@@ -102,6 +99,7 @@
         </a-row>
       </a-layout-content>
     </a-layout>
+
 </template>
     <!-- <a-modal
       title="Docs form"
@@ -213,7 +211,7 @@
       };
 
       /**
-       *  QuerySearch
+       *  QueryListSearch
        * 
       */
       const handleQuerySearch = (param: any) => {
@@ -236,6 +234,7 @@
             }
         });
       };
+
 
 
       // ----- Docs Form ------
@@ -265,7 +264,8 @@
           modalLoading.value = true;
           const data = response.data; // data = CommomResp
           if(data.success){
-            modalVisible.value = false;
+            // modalVisible.value = false;
+            message.success("Save successfully！");
             // Reloading the list.
             handleQuery()
           }else{
@@ -340,26 +340,44 @@
      }
 
 
+      
+      
       /**
-       *  Edit 
+       *  Query Content Search
+       * 
       */
-      // let editor: any;
-      // const createEditor = () =>{
-      //   if (editor == null){
-      //     editor = new E("#content");
-      //     editor.create();
-      //   }else{
-      //     editor.destroy();
-      //     editor.create();
-      //   }
-      // }
-     
+      const handleQueryContent = () => {
+        axios.get("/doc/file-content/" + doc.value.id).then((response) => {
+            const data = response.data;
+            if(data.success){
+              // docs.value = data.content.list;
+              console.log("data.content:", data.content);
+              if(data.content != null){
+                editor.txt.html(data.content);      
+              }else{
+                editor.txt.html('');
+              }   
+            }else{
+              message.error(data.message);
+            }
+        });
+      };
+      
+      /**
+        *  Edit 
+      */
       const edit = (record: any) =>{
+        // Remove editor rich text box.
+        editor.txt.html('');
         modalVisible.value = true;
         // If you use
         // doc.value = record, it is a shallow copy. 
         // Changing doc causes changing of the record. 
         doc.value = Tool.copy(record);
+        // Use doc.value.id
+        console.log(doc.value);
+        handleQueryContent();
+
 
         // Can't select the children of the current node as its parent.
         treeSelectData.value = Tool.copy(level1.value);
@@ -375,6 +393,8 @@
       */
 
       const add = () =>{
+        // Remove editor rich text box.
+        editor.txt.html('');
         modalVisible.value = true;
         doc.value = {
           ebookId: route.query.ebookId
