@@ -104,5 +104,5 @@ create table `content`(
   primary key(`id`)
 ) engine=innodb default charset=utf8mb4 comment='Document content';
 
-select * from `doc`;
+select * from `content`;
 

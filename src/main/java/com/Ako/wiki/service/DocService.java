@@ -1,7 +1,9 @@
 package com.Ako.wiki.service;
 
+import com.Ako.wiki.domain.Content;
 import com.Ako.wiki.domain.Doc;
 import com.Ako.wiki.domain.DocExample;
+import com.Ako.wiki.mapper.ContentMapper;
 import com.Ako.wiki.mapper.DocMapper;
 import com.Ako.wiki.req.DocQueryReq;
 import com.Ako.wiki.req.DocSaveReq;
@@ -26,6 +28,9 @@ import java.util.List;
 public class DocService {
     @Resource
     private DocMapper docMapper;
+
+    @Resource
+    private ContentMapper contentMapper;
 
     @Resource
     private SnowFlake snowFlake;
@@ -93,13 +98,20 @@ public class DocService {
     public void save(DocSaveReq req){
         // Save have two types: 1. Modify, 2. Add.
         Doc doc = CopyUtil.copy(req, Doc.class);
+        Content content = CopyUtil.copy(req, Content.class);
         if(ObjectUtils.isEmpty(req.getId())){
             // Add
             doc.setId(snowFlake.nextId());
             docMapper.insert(doc);
+            content.setId(doc.getId());
+            contentMapper.insert(content);
         }else{
             // Update
             docMapper.updateByPrimaryKey(doc);
+            int count = contentMapper.updateByPrimaryKeyWithBLOBs(content);
+            if(count == 0){
+                contentMapper.insert(content);
+            }
         }
     }
 

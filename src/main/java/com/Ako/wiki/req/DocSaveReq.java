@@ -2,17 +2,25 @@ package com.Ako.wiki.req;
 
 import javax.validation.constraints.NotNull;
 
+import com.Ako.wiki.domain.Content;
+
 public class DocSaveReq {
     private Long id;
 
     @NotNull(message = "[Ebook id] can't be null")
     private Long ebookId;
+
     @NotNull(message = "[Parent id] can't be null")
     private Long parent;
+
     @NotNull(message = "[Name] can't be null")
     private String name;
+
     @NotNull(message = "[Order] can't be null")
     private Integer sort;
+
+    @NotNull(message = "[Conten] can't be null")
+    private String content;
 
     private Integer viewCount;
 
@@ -28,6 +36,14 @@ public class DocSaveReq {
 
     public Long getEbookId() {
         return ebookId;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public void setEbookId(Long ebookId) {
@@ -76,18 +92,15 @@ public class DocSaveReq {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", ebookId=").append(ebookId);
-        sb.append(", parent=").append(parent);
-        sb.append(", name=").append(name);
-        sb.append(", sort=").append(sort);
-        sb.append(", viewCount=").append(viewCount);
-        sb.append(", voteCount=").append(voteCount);
-        sb.append("]");
-        return sb.toString();
+        return "DocSaveReq{" +
+                "id=" + id +
+                ", ebookId=" + ebookId +
+                ", parent=" + parent +
+                ", name='" + name + '\'' +
+                ", sort=" + sort +
+                ", viewCount=" + viewCount +
+                ", voteCount=" + voteCount +
+                ", content='" + content + '\'' +
+                '}';
     }
 }
