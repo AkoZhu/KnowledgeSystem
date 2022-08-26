@@ -142,7 +142,7 @@ public class DocService {
 
     public String fileContent(Long id){
         Content content = contentMapper.selectByPrimaryKey(id);
-        if(content == null) return null;
+        if(content == null) return "";
         return content.getContent();
     }
 }
