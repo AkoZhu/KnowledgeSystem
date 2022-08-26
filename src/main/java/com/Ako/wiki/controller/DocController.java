@@ -26,11 +26,11 @@ public class DocController {
     @Resource
     private DocService docService;
 
-    @GetMapping("/all") // we can change "/doc/list" to "/list" since we add @RequestMapping("/doc");
-    public CommonResp all() {
+    @GetMapping("/all/{ebookId}") // we can change "/doc/list" to "/list" since we add @RequestMapping("/doc");
+    public CommonResp all(@PathVariable Long ebookId) {
         // Don't let the whole information, the Doc class show in Controller.
         CommonResp<List<DocQueryResp>> resp = new CommonResp<>();
-        List<DocQueryResp> list = docService.all();
+        List<DocQueryResp> list = docService.all(ebookId);
         resp.setContent(list);
         return resp;
     }

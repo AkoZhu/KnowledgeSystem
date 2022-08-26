@@ -95,7 +95,7 @@ insert into `doc` (id, ebook_id, parent, name, sort, view_count, vote_count) val
 insert into `doc` (id, ebook_id, parent, name, sort, view_count, vote_count) values (6, 1, 5, 'Document2.2.1', 1, 0, 0);
 
 update `doc` set parent = 1 where `id`= 2
-select * from `doc`
+select * from `doc`;
 
 drop table if exists `content`;
 create table `content`(
@@ -105,4 +105,6 @@ create table `content`(
 ) engine=innodb default charset=utf8mb4 comment='Document content';
 
 select * from `content`;
+select * from `doc`;
+
 
