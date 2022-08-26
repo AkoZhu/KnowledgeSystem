@@ -31,8 +31,8 @@
           :loading="loading"
           :pagination="false"
         >
-          <template #cover="{ text: cover }">
-            <img v-if="cover" :src="cover" alt="avatar" />
+          <template #name="{ text, record }">
+            {{record.sort}}{{text}}
           </template>
           <template v-slot:action="{ text: record }">
             <a-space size="small">

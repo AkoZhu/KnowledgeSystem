@@ -4,7 +4,7 @@
         :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
       >
         <!-- Content -->
-        <a-row>
+        <a-row :gutter="24">
           <a-col :span="8">
             <p>
               <a-form layout="inline" :model="param">
@@ -32,13 +32,14 @@
               :data-source="level1"
               :loading="loading"
               :pagination="false"
+              size="small"
             >
-              <template #cover="{ text: cover }">
-                <img v-if="cover" :src="cover" alt="avatar" />
+              <template #name="{ text, record }">
+                {{record.sort}} {{text}}
               </template>
               <template v-slot:action="{ text: record }">
                 <a-space size="small">
-                  <a-button type="primary" @click="edit(record)">
+                  <a-button type="primary" @click="edit(record)" size="small">
                     Edit
                   </a-button>
                   <a-popconfirm
@@ -47,7 +48,7 @@
                     cancel-text="No"
                     @confirm="handleDelete(record.id)"
                   >
-                    <a-button type="danger">
+                    <a-button type="danger" size="small">
                       Delete
                     </a-button>
                   </a-popconfirm>
@@ -56,15 +57,25 @@
             </a-table>    
           </a-col>
           <a-col :span="16">
+            <p>
+              <a-form layout="inline" :model="param">
+                <a-form-item>
+                  <a-button type="primary" @click="handleSave()">
+                    Save
+                  </a-button>
+                </a-form-item>
+              </a-form>
+            </p>
             <a-form 
               :model="doc" 
               :label-col="{ span: 6 }" 
               :wrapper-col="{ span: 18 }"
+              layout="vertical"
             >
-              <a-form-item label="Name">
-                <a-input v-model:value="doc.name" />
+              <a-form-item >
+                <a-input v-model:value="doc.name" placeholder="Name"/>
               </a-form-item>
-              <a-form-item label="Parent Doc">
+              <a-form-item >
                   <a-tree-select
                     v-model:value="doc.parent"
                     show-search
@@ -78,10 +89,10 @@
                   >
                   </a-tree-select>
               </a-form-item>
-              <a-form-item label="Order">
-                <a-input v-model:value="doc.sort" />
+              <a-form-item >
+                <a-input v-model:value="doc.sort" placeholder="Order"/>
               </a-form-item>
-              <a-form-item label="Content">
+              <a-form-item>
                 <div id="content"></div>
               </a-form-item>
             </a-form>
@@ -152,16 +163,8 @@
       const columns = [
         {
           title: 'Name',
-          dataIndex: 'name'
-        },
-        {
-          title: 'Parent Doc',
-          key: 'parent',
-          dataIndex: 'parent'
-        },
-        {
-          title: 'Order',
-          dataIndex: 'sort'
+          dataIndex: 'name',
+          slots: { customRender: 'name' }
         },
         {
           title: 'Action',
@@ -240,9 +243,10 @@
       const treeSelectData = ref();
       treeSelectData.value = [];
       const doc = ref();
-      doc.value = {};
       const modalVisible = ref(false);
       const modalLoading = ref(false);
+      doc.value = {};
+      let editor: E;
 
 
       /**
@@ -252,15 +256,13 @@
     
 
 
-      const handleModelOk = () => {
+      const handleSave = () => {
         modalLoading.value = true;
-
         axios.post("/doc/save", doc.value).then((response) => {
-          modalLoading.value = false;
+          modalLoading.value = true;
           const data = response.data; // data = CommomResp
           if(data.success){
             modalVisible.value = false;
-
             // Reloading the list.
             handleQuery()
           }else{
@@ -338,16 +340,16 @@
       /**
        *  Edit 
       */
-      let editor: any;
-      const createEditor = () =>{
-        if (editor == null){
-          editor = new E("#content");
-          editor.create();
-        }else{
-          editor.destroy();
-          editor.create();
-        }
-      }
+      // let editor: any;
+      // const createEditor = () =>{
+      //   if (editor == null){
+      //     editor = new E("#content");
+      //     editor.create();
+      //   }else{
+      //     editor.destroy();
+      //     editor.create();
+      //   }
+      // }
      
       const edit = (record: any) =>{
         modalVisible.value = true;
@@ -362,9 +364,6 @@
 
         // Add the Null in tree;
         treeSelectData.value.unshift({id: 0, name: 'Null'});
-        setTimeout(function () {
-          createEditor();
-        }, 100);
       };
 
       /**
@@ -382,9 +381,6 @@
 
         // Add a Null as parent.
         treeSelectData.value.unshift({id: 0, name: 'Null'});
-        setTimeout(function () {
-          createEditor();
-        }, 100);
       };
 
       /**
@@ -426,10 +422,14 @@
       const param = ref();
       param.value = {};
 
+      
 
 
       onMounted(() => {
         handleQuery();
+        editor = new E('#content')
+        editor.config.zIndex = 0;
+        editor.create();
       });
 
       return {
@@ -445,7 +445,7 @@
         doc,
         modalVisible,
         modalLoading,
-        handleModelOk,
+        handleSave,
 
         param,
         handleQuery,
