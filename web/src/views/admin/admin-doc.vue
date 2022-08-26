@@ -158,6 +158,8 @@
       console.log("Route: ",route);
       const docs = ref();
       const loading = ref(false);
+      const treeSelectData = ref();
+      treeSelectData.value = [];
 
       const columns = [
         {
@@ -203,6 +205,11 @@
               level1.value = [];
               level1.value = Tool.array2Tree(docs.value, 0);
               console.log("Tree Structure:", level1);
+              
+              treeSelectData.value = Tool.copy(level1.value);
+
+              // Add a Null as parent.
+              treeSelectData.value.unshift({id: 0, name: 'Null'});
             }else{
               message.error(data.message);
             }
@@ -240,8 +247,6 @@
       // Because the property state of the tree selection component 
       // will change (disabled) with the node of the currently edited book, 
       // declare a reactive variable separately. 
-      const treeSelectData = ref();
-      treeSelectData.value = [];
       const doc = ref();
       doc.value = {};
       const modalVisible = ref(false);
@@ -453,6 +458,7 @@
         editor = new E('#content')
         editor.config.zIndex = 0;
         editor.create();
+
       });
 
       return {
