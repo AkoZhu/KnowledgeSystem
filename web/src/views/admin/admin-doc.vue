@@ -92,11 +92,30 @@
                 <a-input v-model:value="doc.sort" placeholder="Order"/>
               </a-form-item>
               <a-form-item>
+                <a-button 
+                  type="primary" 
+                  @click="handlePreviewContent"
+                >
+                  <EyeOutlined/> Previw
+                </a-button>
+              </a-form-item>
+
+              <a-form-item>
                 <div id="content"></div>
               </a-form-item>
             </a-form>
           </a-col>
         </a-row>
+
+        <a-drawer 
+          width="900" 
+          placement="right" 
+          :closeable="false" 
+          :visible="drawerVisible"
+          @close="onDrawerClose"
+        >
+          <div class="wangeditor" :innerHTML="previewHtml"></div>
+        </a-drawer>
       </a-layout-content>
     </a-layout>
 </template>
@@ -269,7 +288,7 @@
           const data = response.data; // data = CommomResp
           if(data.success){
             // modalVisible.value = false;
-            message.success("Save successfully！");
+            message.success("Save successfully!");
             // Reloading the list.
             handleQuery()
           }else{
@@ -450,6 +469,20 @@
       const param = ref();
       param.value = {};
 
+
+      //---------- Rich txt preview ----------
+      const drawerVisible = ref(false);
+      const previewHtml = ref();
+      const handlePreviewContent = () => {
+        const html = editor.txt.html();
+        previewHtml.value = html;
+        drawerVisible.value = true;
+      };
+      
+      const onDrawerClose = () => {
+        drawerVisible.value = false;
+      }
+
       
 
 
@@ -481,6 +514,11 @@
         handleQuerySearch,
 
         treeSelectData,
+
+        handlePreviewContent,
+        onDrawerClose,
+        previewHtml,
+        drawerVisible,
 
       }
     }
