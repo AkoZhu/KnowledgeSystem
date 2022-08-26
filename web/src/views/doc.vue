@@ -6,6 +6,7 @@
         margin:0, 
         minHeight:'280px'}" 
     >
+			<h3 v-if="level1.length === 0"> Can't find given document!</h3>
       <a-row>
         <a-col :span="6">
 					<a-tree
@@ -14,6 +15,7 @@
 						:tree-data="level1"
 						:defaultExpandAll="true"
 						:fieldNames="{title:'name', key:'id', value:'id'}"
+						:defaultSelectedKeys="defaultSelectedKeys"
 					>
 					</a-tree>    
         </a-col>
@@ -50,6 +52,8 @@ export default defineComponent({
       console.log("Route: ",route);
       const docs = ref();
 			const html = ref();
+			const defaultSelectedKeys = ref();
+			defaultSelectedKeys.value = [];
 	
 			const columns = [
 					{
@@ -58,6 +62,24 @@ export default defineComponent({
 						slots: { customRender: 'name' }
 					}
 				];
+
+			/**
+       *  Query Content Search
+       *
+      */
+      const handleQueryContent = (id: number) => {
+        axios.get("/doc/file-content/" + id).then((response) => {
+            const data = response.data;
+            if(data.success){
+              // docs.value = data.content.list;
+              console.log("data.content:", data.content);
+              html.value = data.content;
+            }else{
+              message.error(data.message);
+            }
+        });
+      };
+
 
 			const level1 = ref();// Level 1 Doc tree. Children property is the second level.
       level1.value = [];
@@ -73,6 +95,12 @@ export default defineComponent({
               level1.value = [];
               level1.value = Tool.array2Tree(docs.value, 0);
               console.log("Tree Structure:", level1);
+							if(Tool.isNotEmpty(level1)){
+								// Set this node as selected.
+								defaultSelectedKeys.value = [level1.value[0].id];
+								// Search the content of this selected node.
+								handleQueryContent(level1.value[0].id)
+							}
             }else{
               message.error(data.message);
             }
@@ -112,23 +140,6 @@ export default defineComponent({
 
 
 
-			/**
-       *  Query Content Search
-       *
-      */
-      const handleQueryContent = (id: number) => {
-        axios.get("/doc/file-content/" + id).then((response) => {
-            const data = response.data;
-            if(data.success){
-              // docs.value = data.content.list;
-              console.log("data.content:", data.content);
-              html.value = data.content;
-            }else{
-              message.error(data.message);
-            }
-        });
-      };
-
 			const onSelect = (selectedKeys: any, info: any) =>{
 				console.log('selected', selectedKeys, info);
 				if(Tool.isNotEmpty(selectedKeys)){
@@ -146,6 +157,7 @@ export default defineComponent({
         level1,
 				html,
 				onSelect,
+				defaultSelectedKeys
       }
 		}
 })
@@ -199,7 +211,7 @@ export default defineComponent({
   .wangeditor ul, ol {
     margin: 10px 0 10px 20px;
   }
-	
+
 	/* 和antdv p冲突，覆盖掉 */
   .wangeditor blockquote p {
     font-family:"YouYuan";

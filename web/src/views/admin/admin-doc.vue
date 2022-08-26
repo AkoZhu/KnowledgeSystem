@@ -267,7 +267,9 @@
       // will change (disabled) with the node of the currently edited book, 
       // declare a reactive variable separately. 
       const doc = ref();
-      doc.value = {};
+      doc.value = {
+        ebookId: route.query.ebookId
+      };
       const modalVisible = ref(false);
       const modalLoading = ref(false);
       let editor: E;
@@ -435,13 +437,15 @@
       */
 
       const handleDelete = (id: number) =>{
-        // console.log("level1.value:", level1.value, id);
-        getDeleteIds(level1.value, id);
-        // console.log("ids: ", ids);
-        
+
         // Clear arrays. Otherwise items in array will increase. 
         deleteIds.length = 0;
         deleteNames.length = 0;
+
+        // console.log("level1.value:", level1.value, id);
+        getDeleteIds(level1.value, id);
+        // console.log("deleteIds: ", deleteIds);
+        
         Modal.confirm({
           title: 'Do you want to delete these items?',
           icon: createVNode(ExclamationCircleOutlined),
