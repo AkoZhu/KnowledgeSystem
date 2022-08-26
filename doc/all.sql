@@ -96,3 +96,11 @@ insert into `doc` (id, ebook_id, parent, name, sort, view_count, vote_count) val
 
 update `doc` set parent = 1 where `id`= 2
 select * from `doc`
+
+drop table if exists `content`;
+create table `content`(
+  `id` bigint not null comment 'Document Id',
+  `content` mediumtext not null comment 'content',
+  primary key(`id`)
+) engine=innodb default charset=utf8mb4 comment='Document content';
+

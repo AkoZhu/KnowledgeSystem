@@ -11,11 +11,15 @@
   },
   "dependencies": {
     "@ant-design/icons-vue": "^6.1.0",
+    "@wangeditor/editor": "^5.1.14",
+    "@wangeditor/editor-for-vue": "^5.1.12",
     "ant-design-vue": "^3.2.11",
     "axios": "^0.21.0",
+    "i18next": "^21.9.1",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
-    "vuex": "^4.0.0-0"
+    "vuex": "^4.0.0-0",
+    "wangeditor": "^4.7.15"
   },
   "devDependencies": {
     "@types/node": "^18.7.11",

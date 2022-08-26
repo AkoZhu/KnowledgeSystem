@@ -51,7 +51,7 @@
               </a-popconfirm>
             </a-space>
           </template>
-        </a-table>      
+        </a-table>    
       </a-layout-content>
     </a-layout>
 
@@ -86,17 +86,24 @@
         <a-form-item label="Order">
           <a-input v-model:value="doc.sort" />
         </a-form-item>
+        <a-form-item label="Content">
+          <div id="content"></div>
+        </a-form-item>
       </a-form>
     </a-modal>
 </template>
 
 <script lang="ts">
-  import { defineComponent, onMounted, ref, createVNode} from 'vue';
+  import { defineComponent, onMounted, ref, createVNode, shallowRef} from 'vue';
   import axios from 'axios';
   import { message, Modal } from 'ant-design-vue';
   import { Tool } from '@/util/tool';
   import { useRoute } from 'vue-router';
   import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
+  import { Editor, Toolbar } from '@wangeditor/editor-for-vue';
+  import '@wangeditor/editor/dist/css/style.css'
+  import E from 'wangeditor';
+
 
 
   export default defineComponent({
@@ -200,6 +207,17 @@
       const doc = ref();
       const modalVisible = ref(false);
       const modalLoading = ref(false);
+
+
+      /**
+       *  Value HTML
+       * 
+      */
+    
+
+
+ 
+
       const handleModelOk = () => {
         modalLoading.value = true;
 
@@ -286,6 +304,16 @@
       /**
        *  Edit 
       */
+      let editor: any;
+      const createEditor = () =>{
+        if (editor == null){
+          editor = new E("#content");
+          editor.create();
+        }else{
+          editor.destroy();
+          editor.create();
+        }
+      }
      
       const edit = (record: any) =>{
         modalVisible.value = true;
@@ -300,11 +328,16 @@
 
         // Add the Null in tree;
         treeSelectData.value.unshift({id: 0, name: 'Null'});
+        setTimeout(function () {
+          createEditor();
+        }, 100);
       };
+
       /**
        *  Add 
        * 
       */
+
       const add = () =>{
         modalVisible.value = true;
         doc.value = {
@@ -315,6 +348,9 @@
 
         // Add a Null as parent.
         treeSelectData.value.unshift({id: 0, name: 'Null'});
+        setTimeout(function () {
+          createEditor();
+        }, 100);
       };
 
       /**
@@ -325,6 +361,10 @@
         // console.log("level1.value:", level1.value, id);
         getDeleteIds(level1.value, id);
         // console.log("ids: ", ids);
+        
+        // Clear arrays. Otherwise items in array will increase. 
+        deleteIds.length = 0;
+        deleteNames.length = 0;
         Modal.confirm({
           title: 'Do you want to delete these items?',
           icon: createVNode(ExclamationCircleOutlined),
@@ -390,5 +430,8 @@
     height: 50px;
   }
 </style>
+
+
+
 
 
