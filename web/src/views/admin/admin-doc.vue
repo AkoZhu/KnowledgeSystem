@@ -99,7 +99,6 @@
         </a-row>
       </a-layout-content>
     </a-layout>
-
 </template>
     <!-- <a-modal
       title="Docs form"
@@ -340,11 +339,11 @@
      }
 
 
-      
-      
+
+
       /**
        *  Query Content Search
-       * 
+       *
       */
       const handleQueryContent = () => {
         axios.get("/doc/file-content/" + doc.value.id).then((response) => {
@@ -353,19 +352,20 @@
               // docs.value = data.content.list;
               console.log("data.content:", data.content);
               if(data.content != null){
-                editor.txt.html(data.content);      
+                editor.txt.html(data.content);
               }else{
                 editor.txt.html('');
-              }   
+              }
             }else{
               message.error(data.message);
             }
         });
       };
-      
+
       /**
-        *  Edit 
+        *  Edit
       */
+
       const edit = (record: any) =>{
         // Remove editor rich text box.
         editor.txt.html('');
