@@ -7,24 +7,18 @@
         minHeight:'280px'}" 
     >
       <a-row>
-        <a-col :span="8">
-					<a-table
-						v-if= "level1 && level1.length > 1"
-						:columns="columns"
-						:row-key="record => record.id"
-						:data-source="level1"
-						:loading="loading"
-						:pagination="false"
-						size="small"
-						:defaultExpandAllRows="true"
+        <a-col :span="6">
+					<a-tree
+						v-if= "level1 && level1.length > 0"
+						@select="onSelect"
+						:tree-data="level1"
+						:defaultExpandAll="true"
+						:fieldNames="{title:'name', key:'id', value:'id'}"
 					>
-						<template #name="{ text, record }">
-								{{record.sort}} {{text}}
-						</template>
-					</a-table>    
+					</a-tree>    
         </a-col>
-        <a-col :span="16">
-					<div id="content"></div>
+        <a-col :span="18">
+					<div :innerHTML="html"></div>
 				</a-col>
       </a-row>
         <div class="doc">
@@ -52,7 +46,8 @@ export default defineComponent({
       const route = useRoute();
       console.log("Route: ",route);
       const docs = ref();
-      const loading = ref(false);	
+			const html = ref();
+	
 			const columns = [
 					{
 						title: 'Name',
@@ -65,10 +60,8 @@ export default defineComponent({
       level1.value = [];
 
 			const handleQuery = () => {
-        loading.value = true;
         axios.get("/doc/all/" + route.query.ebookId
           ).then((response) => {
-            loading.value = false;
             const data = response.data;
             if(data.success){
               docs.value = data.content;
@@ -87,75 +80,69 @@ export default defineComponent({
        *  QueryListSearch
        * 
       */
-      const handleQuerySearch = (param: any) => {
-        loading.value = true;
-        axios.get("/doc/list", {
-          params:{
-            name:param.name
-          }
-        }).then((response) => {
-            loading.value = false;
-            const data = response.data;
-            if(data.success){
-              docs.value = data.content.list;
+      // const handleQuerySearch = (param: any) => {
+      //   axios.get("/doc/list", {
+      //     params:{
+      //       name:param.name
+      //     }
+      //   }).then((response) => {
 
-              level1.value = [];
-              level1.value = Tool.array2Tree(docs.value, 0);
-              console.log("Tree Structure:", level1);             
-            }else{
-              message.error(data.message);
-            }
-        });
-      };
+      //       const data = response.data;
+      //       if(data.success){
+      //         docs.value = data.content.list;
+
+      //         level1.value = [];
+      //         level1.value = Tool.array2Tree(docs.value, 0);
+      //         console.log("Tree Structure:", level1);             
+      //       }else{
+      //         message.error(data.message);
+      //       }
+      //   });
+      // };
+
 
 
 			const treeSelectData = ref();
       treeSelectData.value = [];
       const doc = ref();
       doc.value = {};
-			let editor: E;
+
 
 
 			/**
        *  Query Content Search
        *
       */
-      const handleQueryContent = () => {
-        axios.get("/doc/file-content/" + doc.value.id).then((response) => {
+      const handleQueryContent = (id: number) => {
+        axios.get("/doc/file-content/" + id).then((response) => {
             const data = response.data;
             if(data.success){
               // docs.value = data.content.list;
               console.log("data.content:", data.content);
-              if(data.content != null){
-                editor.txt.html(data.content);
-              }else{
-                editor.txt.html('');
-              }
+              html.value = data.content;
             }else{
               message.error(data.message);
             }
         });
       };
 
+			const onSelect = (selectedKeys: any, info: any) =>{
+				console.log('selected', selectedKeys, info);
+				if(Tool.isNotEmpty(selectedKeys)){
+					// load content
+					handleQueryContent(selectedKeys[0]);
+				}
+			};
+
 		onMounted(() => {
         handleQuery();
-        editor = new E('#content')
-        editor.config.zIndex = 0;
-        editor.create();
     });
 
 		return {
         // docs,
         level1,
-        columns,
-        loading,
-
-        doc,
-
-        handleQuery,
-        handleQuerySearch,
-
-        treeSelectData,
+				html,
+				onSelect,
       }
 		}
 })
