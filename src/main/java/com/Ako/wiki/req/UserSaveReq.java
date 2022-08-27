@@ -2,18 +2,19 @@ package com.Ako.wiki.req;
 
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 
 public class UserSaveReq {
     private Long id;
 
-    @NotNull(message = "[LoginName] can't be empty.")
+    @NotEmpty(message = "[LoginName] can't be empty.")
     private String loginName;
-    @NotNull(message = "[Name] can't be empty.")
+    
+    @NotEmpty(message = "[Name] can't be empty.")
     private String name;
 
-    @NotNull(message = "[Password] can't be empty.")
+    @NotEmpty(message = "[Password] can't be empty.")
 //    @Length(min = 6, max = 20, message = "[Password] needs to be 6 to 20 digits.")
     @Pattern(regexp = "(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,32}$", message = "[Password] must to have digits " +
             "and letters, and its digit length must be from 6 to 32.")

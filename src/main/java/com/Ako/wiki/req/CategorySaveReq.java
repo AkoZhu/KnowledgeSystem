@@ -1,16 +1,17 @@
 package com.Ako.wiki.req;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotEmpty;
+
 
 public class CategorySaveReq {
     private Long id;
 
     private Long parent;
 
-    @NotNull(message="[Name] can't be Empty.")
+    @NotEmpty(message="[Name] can't be Empty.")
     private String name;
 
-    @NotNull(message="[Sort] can't be Empty.")
+    @NotEmpty(message="[Sort] can't be Empty.")
     private Integer sort;
 
     public Long getId() {

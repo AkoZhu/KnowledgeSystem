@@ -1,11 +1,12 @@
 package com.Ako.wiki.req;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 public class EbookSaveReq {
     private Long id;
 
-    @NotNull(message="[Name] can't be Empty.")
+    @NotEmpty(message="[Name] can't be Empty.")
     private String name;
 
     private Long category1Id;
