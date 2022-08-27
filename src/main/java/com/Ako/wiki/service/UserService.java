@@ -2,6 +2,8 @@ package com.Ako.wiki.service;
 
 import com.Ako.wiki.domain.User;
 import com.Ako.wiki.domain.UserExample;
+import com.Ako.wiki.exception.BusinessException;
+import com.Ako.wiki.exception.BusinessExceptionCode;
 import com.Ako.wiki.mapper.UserMapper;
 import com.Ako.wiki.req.UserQueryReq;
 import com.Ako.wiki.req.UserSaveReq;
@@ -77,9 +79,14 @@ public class UserService {
         // Save have two types: 1. Modify, 2. Add.
         User user = CopyUtil.copy(req, User.class);
         if(ObjectUtils.isEmpty(req.getId())){
-            // Add
-            user.setId(snowFlake.nextId());
-            userMapper.insert(user);
+            if(selectByLoginName(req.getLoginName()) == null){
+                // Add
+                user.setId(snowFlake.nextId());
+                userMapper.insert(user);
+            }else{
+                // User exists.
+                throw new BusinessException(BusinessExceptionCode.USER_LOGIN_NAME_EXIST);
+            }
         }else{
             // Update
             userMapper.updateByPrimaryKey(user);
@@ -91,5 +98,16 @@ public class UserService {
     */
     public void delete(Long id){
         userMapper.deleteByPrimaryKey(id);
+    }
+
+    public User selectByLoginName(String loginName){
+        UserExample userExample = new UserExample();
+        UserExample.Criteria criteria = userExample.createCriteria();
+        if (ObjectUtils.isEmpty(loginName)) return null;
+        
+        criteria.andLoginNameEqualTo(loginName);
+        List<User> userlist = userMapper.selectByExample(userExample);
+        if(userlist.isEmpty()) return null;
+        else return userlist.get(0);
     }
 }

@@ -1,5 +1,7 @@
 package com.Ako.wiki.controller;
 
+import com.Ako.wiki.exception.BusinessException;
+import com.Ako.wiki.exception.BusinessExceptionCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.validation.BindException;
@@ -29,6 +31,36 @@ public class ControllerExceptionHandler {
         LOG.warn("Parameter validation fails: {}", e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
         commonResp.setSuccess(false);
         commonResp.setMessage(e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
+        return commonResp;
+    }
+
+    /**
+     * 业务异常统一处理
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(value = BusinessException.class)
+    @ResponseBody
+    public CommonResp validExceptionHandler(BusinessException e) {
+        CommonResp commonResp = new CommonResp();
+        LOG.warn("Business Error: {}", e.getCode().getDesc());
+        commonResp.setSuccess(false);
+        commonResp.setMessage(e.getCode().getDesc());
+        return commonResp;
+    }
+
+    /**
+     * 其他异常统一处理
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(value = Exception.class)
+    @ResponseBody
+    public CommonResp validExceptionHandler(Exception e) {
+        CommonResp commonResp = new CommonResp();
+        LOG.error("System Error:", e);
+        commonResp.setSuccess(false);
+        commonResp.setMessage("System errors, please contact with manager!");
         return commonResp;
     }
 }
