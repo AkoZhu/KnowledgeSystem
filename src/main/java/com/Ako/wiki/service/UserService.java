@@ -89,7 +89,10 @@ public class UserService {
             }
         }else{
             // Update
-            userMapper.updateByPrimaryKey(user);
+            // We first make login Name as null, so the selective method
+            // will not change the loginName. 
+            user.setLoginName(null);
+            userMapper.updateByPrimaryKeySelective(user);
         }
     }
 
