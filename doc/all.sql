@@ -45,7 +45,7 @@ create table `demo`(
 insert into `demo` (id, name) values (1, 'Test');
 
 
-# 分类
+-- Create Category table
 drop table if exists `category`;
 create table `category` (
   `id` bigint not null comment 'id',
@@ -74,7 +74,7 @@ insert into `category` (id, parent, name, sort) values (503, 500, '热门服务�
 select * from `category`
 
 
-
+-- Create Document table
 drop table if exists `doc`;
 create table `doc` (
     `id` bigint not null comment 'id',
@@ -87,6 +87,7 @@ create table `doc` (
     primary key(`id`)
 ) engine=innodb default charset= utf8mb4 comment='document';
 
+--- Test
 insert into `doc` (id, ebook_id, parent, name, sort, view_count, vote_count) values (1, 1, 0, 'Document1', 1, 0, 0)
 insert into `doc` (id, ebook_id, parent, name, sort, view_count, vote_count) values (2, 1, 1, 'Document1.1', 1, 0, 0);
 insert into `doc` (id, ebook_id, parent, name, sort, view_count, vote_count) values (3, 1, 0, 'Document2', 2, 0, 0);
@@ -97,6 +98,8 @@ insert into `doc` (id, ebook_id, parent, name, sort, view_count, vote_count) val
 update `doc` set parent = 1 where `id`= 2
 select * from `doc`;
 
+
+--- Create content table
 drop table if exists `content`;
 create table `content`(
   `id` bigint not null comment 'Document Id',
@@ -106,5 +109,20 @@ create table `content`(
 
 select * from `content`;
 select * from `doc`;
+
+
+-- Create User Table
+drop table if exists `user`;
+create table `user` (
+    `id` bigint not null comment 'ID',
+    `login_name` varchar(50) not null comment 'Login Name',
+    `name` varchar(50) comment 'Name',
+    `password` char(32) not null comment 'password',
+    primary key(`id`),
+    unique key `login_name_unique` (`login_name`)
+) engine=innodb default charset=utf8mb4 comment='User';
+select * from `user`
+
+
 
 
