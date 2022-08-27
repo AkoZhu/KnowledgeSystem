@@ -12,3 +12,7 @@ GET http://localhost:8080/category/list?name=Vue
 ###
 
 GET http://localhost:8080/doc/file-content/218251513368285184
+
+###
+
+GET http://localhost:8080/user/list?loginName=test
