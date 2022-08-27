@@ -49,7 +49,6 @@
 </template>
 
 <script lang="ts">
-import { affixProps } from 'ant-design-vue/lib/affix';
 import axios from 'axios';
 import { message } from 'ant-design-vue';
 import { defineComponent, ref } from 'vue';
@@ -75,7 +74,7 @@ export default defineComponent({
     const login = () => {
       console.log("Start login.")
       loginModalLoading.value = true;
-      loginUser.value.password = hexMd5(loginUser.value.password);
+      loginUser.value.password = hexMd5(loginUser.value.password + KEY);
       axios.post("/user/login", loginUser.value).then((response) =>{
         loginModalLoading.value = false;
         const data = response.data;
