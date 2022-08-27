@@ -2,13 +2,18 @@ package com.Ako.wiki.controller;
 
 import com.Ako.wiki.domain.Test;
 import com.Ako.wiki.service.TestService;
+import com.mysql.cj.log.LogFactory;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @RestController // Used when it returns a String.
 // @Controller // Used when it returns a web page
@@ -21,7 +26,13 @@ public class TestController {
     private String testHello;
 
     @Resource
+    private RedisTemplate redisTemplate = new RedisTemplate();
+
+
+    @Resource
     private TestService testService;
+
+    private static final Logger LOG = LoggerFactory.getLogger(TestController.class);
 
     /**
      * The usual http request methods are following four:
@@ -53,4 +64,19 @@ public class TestController {
 
     @GetMapping("/test/list")
     public List<Test> list() {return testService.list();}
+
+
+    @RequestMapping("/redis/set/{key}/{value}")
+    public String set(@PathVariable Long key, @PathVariable String value){
+        redisTemplate.opsForValue().set(key, value, 3600, TimeUnit.SECONDS);
+        LOG.info("key: {}, value: {}", key, value);
+        return "success";
+    }
+
+    @RequestMapping("/redis/get/{key}")
+    public Object get(@PathVariable Long key){
+        Object object = redisTemplate.opsForValue().get(key);
+        LOG.info("key: {}, value: {}", key, object);
+        return object;
+    }
 }

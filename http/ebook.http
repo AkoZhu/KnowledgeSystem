@@ -16,3 +16,16 @@ GET http://localhost:8080/doc/file-content/218251513368285184
 ###
 
 GET http://localhost:8080/user/list?loginName=test
+###
+
+GET http://localhost:8080/redis/set/123/test 
+Accept: application/json
+###
+
+GET http://localhost:8080/redis/get/218815930975784960
+Accept: application/json
+###
+
+GET http://localhost:8080/redis/get/123
+Accept: application/json
+
