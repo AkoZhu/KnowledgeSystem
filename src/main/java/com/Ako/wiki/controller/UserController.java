@@ -8,6 +8,7 @@ import com.Ako.wiki.resp.UserQueryResp;
 import com.Ako.wiki.resp.PageResp;
 import com.Ako.wiki.service.UserService;
 
+import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,6 +41,7 @@ public class UserController {
     public CommonResp save(@Valid @RequestBody UserSaveReq req) {
         // Don't let the whole information, the User class show in Controller.
         CommonResp resp = new CommonResp<>();
+        req.setPassword(DigestUtils.md5DigestAsHex(req.getPassword().getBytes()));
         userService.save(req);
         return resp;
     }
