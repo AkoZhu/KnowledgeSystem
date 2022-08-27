@@ -1,6 +1,9 @@
 <template>
   <a-layout-header class="header">
     <div class="logo" />
+    <a class="login-menu" @click="showLoginModal">
+      <span><user-outlined /> Login</span>
+    </a>
     <a-menu
         theme="dark"
         mode="horizontal"
@@ -22,13 +25,66 @@
           <router-link to="/about">About</router-link>
         </a-menu-item>
     </a-menu>
+
+    <a-modal title="Login" 
+      v-model:visible="loginModalVisible"
+      :confirm-loading="loginModalLoading"
+      @ok="login"
+    >
+      <a-form
+        :model="loginUser"
+        :label-col="{ span: 6 }"
+        :wrapper-col="{ span: 18 }"
+      >
+        <a-form-item label="Login Name">
+          <a-input v-model:value="loginUser.loginName"/>
+        </a-form-item>
+        <a-form-item label="Password">
+          <a-input v-model:value="loginUser.password" type="password"/>
+        </a-form-item>        
+      </a-form>
+    </a-modal>
+
   </a-layout-header>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
   name: 'the-header',
+  setup() {
+    const loginUser = ref({
+      loginName:"test",
+      password:"test"
+    })
+    const loginModalVisible = ref(false);
+    const loginModalLoading = ref(false);
+
+    const showLoginModal = () =>{
+      loginModalVisible.value = true;
+    }
+
+    // Log in 
+    const login = () => {
+      console.log("Start login.")
+    }
+    
+    return {
+      loginModalVisible,
+      loginModalLoading,
+      showLoginModal,
+      loginUser,
+      login
+    }
+
+  }
 });
 </script>
+
+<style>
+  .login-menu {
+    float: right !important;
+    color:white;
+  }
+</style>
