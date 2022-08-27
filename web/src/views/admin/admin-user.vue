@@ -37,6 +37,9 @@
               <a-button type="primary" @click="edit(record)">
                 Edit
               </a-button>
+              <a-button type="primary" @click="edit(record)">
+                New Password
+              </a-button>  
               <a-popconfirm
                 title="Are you sure delete this User?"
                 ok-text="Yes"
@@ -46,7 +49,7 @@
                 <a-button type="danger">
                   Delete
                 </a-button>
-              </a-popconfirm>
+              </a-popconfirm>            
             </a-space>
           </template>
         </a-table>      
@@ -70,8 +73,8 @@
         <a-form-item label="Name">
           <a-input v-model:value="user.name" />
         </a-form-item>
-        <a-form-item label="Password">
-          <a-input v-model:value="user.password" />
+        <a-form-item label="Password" v-show="!user.id">
+          <a-input v-model:value="user.password"/>
         </a-form-item>
       </a-form>
     </a-modal>
