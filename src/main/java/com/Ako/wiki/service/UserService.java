@@ -6,6 +6,7 @@ import com.Ako.wiki.exception.BusinessException;
 import com.Ako.wiki.exception.BusinessExceptionCode;
 import com.Ako.wiki.mapper.UserMapper;
 import com.Ako.wiki.req.UserQueryReq;
+import com.Ako.wiki.req.UserResetPassword;
 import com.Ako.wiki.req.UserSaveReq;
 import com.Ako.wiki.resp.UserQueryResp;
 import com.Ako.wiki.resp.PageResp;
@@ -114,5 +115,18 @@ public class UserService {
         List<User> userlist = userMapper.selectByExample(userExample);
         if(userlist.isEmpty()) return null;
         else return userlist.get(0);
+    }
+
+
+
+    /**
+     * 
+     * Reset password
+     *  
+    */
+    public void resetPassword(UserResetPassword req){
+        // Save have two types: 1. Modify, 2. Add.
+        User user = CopyUtil.copy(req, User.class);
+        userMapper.updateByPrimaryKeySelective(user);
     }
 }

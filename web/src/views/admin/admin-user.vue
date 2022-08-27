@@ -7,7 +7,7 @@
         <p>
           <a-form layout="inline" :model="param">
             <a-form-item>
-              <a-input v-model:value="param.loginName" placeholder="Name"></a-input>
+              <a-input v-model:value="param.loginName" placeholder="Login Name"></a-input>
             </a-form-item>
             <a-form-item>
               <a-button
@@ -34,12 +34,12 @@
         >
           <template v-slot:action="{ text, record }">
             <a-space size="small">
+              <a-button type="primary" @click="resetPassword(record)">
+                Reset Password
+              </a-button> 
               <a-button type="primary" @click="edit(record)">
                 Edit
-              </a-button>
-              <a-button type="primary" @click="edit(record)">
-                New Password
-              </a-button>  
+              </a-button> 
               <a-popconfirm
                 title="Are you sure delete this User?"
                 ok-text="Yes"
@@ -74,6 +74,23 @@
           <a-input v-model:value="user.name" />
         </a-form-item>
         <a-form-item label="Password" v-show="!user.id">
+          <a-input v-model:value="user.password"/>
+        </a-form-item>
+      </a-form>
+    </a-modal>
+
+    <a-modal
+      title="Reset password"
+      v-model:visible="resetModalVisible"
+      :confirm-loading="resetModalLoading"
+      @ok="handleResetModelOk"
+    >
+      <a-form 
+        :model="user" 
+        :label-col="{ span: 6 }" 
+        :wrapper-col="{ span: 18 }"
+      >
+        <a-form-item label="New Password">
           <a-input v-model:value="user.password"/>
         </a-form-item>
       </a-form>
@@ -235,6 +252,46 @@
 
 
 
+
+      // ----- Reset password form ------
+      /**
+       * Array, [100, 101] represents Frontend Development/ Vue.
+       * 
+      */
+      const resetModalVisible = ref(false);
+      const resetModalLoading = ref(false);
+      const handleResetModelOk = () => {
+        resetModalLoading.value = true;
+
+        user.value.password = hexMd5(user.value.password + KEY);
+
+        axios.post("/user/reset-password", user.value).then((response) => {
+          resetModalLoading.value = false;
+          const data = response.data; // data = CommomResp
+          if(data.success){
+            resetModalVisible.value = false;
+
+            // Reloading the list.
+            handleQuery({
+              page: pagination.value.current,
+              size: pagination.value.pageSize,
+            })
+          }else{
+            message.error(data.message);
+          }
+        })
+      };
+
+      /**
+       *  reset password  
+      */
+     
+      const resetPassword = (record: any) =>{
+        resetModalVisible.value = true;
+        user.value = Tool.copy(record);
+        user.value.password = null;
+      };
+
       onMounted(() => {
         handleQuery({
           page: 1,
@@ -261,6 +318,12 @@
 
         param,
         handleQuery,
+
+
+        resetModalVisible,
+        resetModalLoading,
+        handleResetModelOk,
+        resetPassword,
       }
     }
   });

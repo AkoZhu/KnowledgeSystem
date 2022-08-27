@@ -2,6 +2,7 @@ package com.Ako.wiki.controller;
 
 //import com.Ako.wiki.domain.User;
 import com.Ako.wiki.req.UserQueryReq;
+import com.Ako.wiki.req.UserResetPassword;
 import com.Ako.wiki.req.UserSaveReq;
 import com.Ako.wiki.resp.CommonResp;
 import com.Ako.wiki.resp.UserQueryResp;
@@ -43,6 +44,15 @@ public class UserController {
         CommonResp resp = new CommonResp<>();
         req.setPassword(DigestUtils.md5DigestAsHex(req.getPassword().getBytes()));
         userService.save(req);
+        return resp;
+    }
+
+    @PostMapping("/reset-password")
+    public CommonResp resetPassword(@Valid @RequestBody UserResetPassword req) {
+        // Don't let the whole information, the User class show in Controller.
+        CommonResp resp = new CommonResp<>();
+        req.setPassword(DigestUtils.md5DigestAsHex(req.getPassword().getBytes()));
+        userService.resetPassword(req);
         return resp;
     }
 
