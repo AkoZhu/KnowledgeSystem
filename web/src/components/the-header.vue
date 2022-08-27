@@ -1,8 +1,14 @@
 <template>
   <a-layout-header class="header">
     <div class="logo" />
-    <a class="login-menu" @click="showLoginModal">
-      <span><user-outlined /> Login</span>
+    <a class="login-menu" v-if="user.id">
+      <span>Welcome: <UserOutlined /> {{user.name}}</span>
+    </a>
+    <a class="login-menu" 
+      @click="showLoginModal" 
+      v-if="!user.id"
+    >
+      <span> <UserOutlined/> Login</span>
     </a>
     <a-menu
         theme="dark"
@@ -52,16 +58,25 @@
 import axios from 'axios';
 import { message } from 'ant-design-vue';
 import { defineComponent, ref } from 'vue';
+import { UserOutlined } from '@ant-design/icons-vue';
 
 declare let hexMd5: any;
 declare let KEY: any;
 
 export default defineComponent({
   name: 'the-header',
+  components:{
+    UserOutlined
+  },
   setup() {
+    // Save after login.
+    const user = ref();
+    user.value = {};
+
+    // Used for login.
     const loginUser = ref({
       loginName:"test",
-      password:"test"
+      password:"test123"
     })
     const loginModalVisible = ref(false);
     const loginModalLoading = ref(false);
@@ -81,6 +96,7 @@ export default defineComponent({
         if(data.success){
           loginModalVisible.value = false;
           message.success("Log in successfully!");
+          user.value = data.content;
         }else{
           message.error(data.message);
         }
@@ -92,7 +108,8 @@ export default defineComponent({
       loginModalLoading,
       showLoginModal,
       loginUser,
-      login
+      login,
+      user
     }
 
   }
