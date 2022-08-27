@@ -1,5 +1,6 @@
 package com.Ako.wiki.controller;
 
+import com.Ako.wiki.req.UserLoginReq;
 //import com.Ako.wiki.domain.User;
 import com.Ako.wiki.req.UserQueryReq;
 import com.Ako.wiki.req.UserResetPassword;
@@ -7,6 +8,7 @@ import com.Ako.wiki.req.UserSaveReq;
 import com.Ako.wiki.resp.CommonResp;
 import com.Ako.wiki.resp.UserQueryResp;
 import com.Ako.wiki.resp.PageResp;
+import com.Ako.wiki.resp.UserLoginResp;
 import com.Ako.wiki.service.UserService;
 
 import org.springframework.util.DigestUtils;
@@ -61,6 +63,15 @@ public class UserController {
         // Don't let the whole information, the User class show in Controller.
         CommonResp resp = new CommonResp<>();
         userService.delete(id);
+        return resp;
+    }
+
+    @PostMapping("/login")
+    public CommonResp login(@Valid @RequestBody UserLoginReq req) {
+        // Don't let the whole information, the User class show in Controller.
+        CommonResp<UserLoginResp> resp = new CommonResp<>();
+        UserLoginResp userLoginResp = userService.login(req);
+        resp.setContent(userLoginResp);
         return resp;
     }
 }

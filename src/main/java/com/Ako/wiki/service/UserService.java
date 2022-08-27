@@ -5,11 +5,13 @@ import com.Ako.wiki.domain.UserExample;
 import com.Ako.wiki.exception.BusinessException;
 import com.Ako.wiki.exception.BusinessExceptionCode;
 import com.Ako.wiki.mapper.UserMapper;
+import com.Ako.wiki.req.UserLoginReq;
 import com.Ako.wiki.req.UserQueryReq;
 import com.Ako.wiki.req.UserResetPassword;
 import com.Ako.wiki.req.UserSaveReq;
 import com.Ako.wiki.resp.UserQueryResp;
 import com.Ako.wiki.resp.PageResp;
+import com.Ako.wiki.resp.UserLoginResp;
 import com.Ako.wiki.util.CopyUtil;
 import com.Ako.wiki.util.SnowFlake;
 import com.github.pagehelper.PageHelper;
@@ -125,8 +127,35 @@ public class UserService {
      *  
     */
     public void resetPassword(UserResetPassword req){
-        // Save have two types: 1. Modify, 2. Add.
+        // Update password. 
         User user = CopyUtil.copy(req, User.class);
         userMapper.updateByPrimaryKeySelective(user);
+    }
+
+    /**
+     * 
+     * Reset password
+     *  
+    */
+    public UserLoginResp login(UserLoginReq req){
+        // Search by loginName 
+        User userDb = selectByLoginName(req.getLoginName());
+        if(ObjectUtils.isEmpty(userDb)){
+            // User doesn't exist. 
+            LOG.info("User doesn't exist,{}", req.getLoginName());
+            throw new BusinessException(BusinessExceptionCode.LOGIN_USER_ERROR);
+        }else{
+            // check password. 
+            if(userDb.getPassword().equals(req.getPassword())){
+                // Login succeed. 
+                UserLoginResp userLoginResp = CopyUtil.copy(userDb, UserLoginResp.class);
+                return userLoginResp;
+            }else {
+                // Password incorrect.
+                LOG.info("Password incorrect! Input password:{}, Database password:{}", 
+                    req.getPassword(), userDb.getPassword());
+                throw new BusinessException(BusinessExceptionCode.LOGIN_USER_ERROR);
+            }
+        }
     }
 }
