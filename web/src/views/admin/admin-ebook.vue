@@ -116,28 +116,28 @@
 
       const columns = [
         {
-          title: '封面',
+          title: 'Cover',
           dataIndex: 'cover',
           slots: { customRender: 'cover' }
         },
         {
-          title: '名称',
+          title: 'Name',
           dataIndex: 'name'
         },
         {
-          title: '分类',
+          title: 'Category',
           slots: { customRender: 'category' }
         },
         {
-          title: '文档数',
+          title: 'Document Number',
           dataIndex: 'docCount'
         },
         {
-          title: '阅读数',
+          title: 'View Count',
           dataIndex: 'viewCount'
         },
         {
-          title: '点赞数',
+          title: 'Vote Count',
           dataIndex: 'voteCount'
         },
         {
