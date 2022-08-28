@@ -11,6 +11,9 @@ GET http://localhost:8080/category/list?name=Vue
 # It can map to the variable in request class. e.g. name will be mapped to EbookReq.name.
 ###
 
+GET http://localhost:8080/category/all
+###
+
 GET http://localhost:8080/doc/file-content/218251513368285184
 
 ###
@@ -18,14 +21,14 @@ GET http://localhost:8080/doc/file-content/218251513368285184
 GET http://localhost:8080/user/list?loginName=test
 ###
 
-GET http://localhost:8080/redis/set/123/test 
+GET http://localhost:8080/test/redis/set/123/test 
 Accept: application/json
 ###
 
-GET http://localhost:8080/redis/get/218815930975784960
+GET http://localhost:8080/test/redis/get/218924192073125888
 Accept: application/json
 ###
 
-GET http://localhost:8080/redis/get/123
+GET http://localhost:8080/redis/get/218924192073125888
 Accept: application/json
 
