@@ -1,6 +1,6 @@
 <template>
     <a-layout-footer style="text-align: center">
-      Wiki Ebooks! Welcome : {{user.name}};
+      Wiki Ebooks! <span v-show="user.id"> Welcome: {{user.name}}</span> 
     </a-layout-footer>
 </template>
 

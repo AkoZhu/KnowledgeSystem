@@ -57,7 +57,7 @@
 <script lang="ts">
 import axios from 'axios';
 import { message } from 'ant-design-vue';
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 import { UserOutlined } from '@ant-design/icons-vue';
 import store from '@/store';
 
@@ -71,8 +71,7 @@ export default defineComponent({
   },
   setup() {
     // Save after login.
-    const user = ref();
-    user.value = {};
+    const user = computed(() => {return store.state.user});
 
     // Used for login.
     const loginUser = ref({
@@ -97,8 +96,7 @@ export default defineComponent({
         if(data.success){
           loginModalVisible.value = false;
           message.success("Log in successfully!");
-          user.value = data.content;
-          store.commit("setUser", user.value);
+          store.commit("setUser", data.content);
         }else{
           message.error(data.message);
         }
