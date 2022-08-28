@@ -71,9 +71,11 @@ import { message } from 'ant-design-vue';
 import { computed, defineComponent, ref } from 'vue';
 import { UserOutlined, LogoutOutlined, LoginOutlined} from '@ant-design/icons-vue';
 import store from '@/store';
+import router from '@/router';
 
 declare let hexMd5: any;
 declare let KEY: any;
+
 
 export default defineComponent({
   name: 'the-header',
@@ -125,6 +127,7 @@ export default defineComponent({
           message.success("Log in successfully!");
           // remove user in sessionStorage.
           store.commit("setUser", {});
+          router.push("/");
         }else{
           message.error(data.message);
         }
