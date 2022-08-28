@@ -23,7 +23,7 @@
           <div>
             <h2>{{doc.name}}</h2>
               <div>
-                <span>View Count: {{doc.viewCount}}</span> &nbsp;&nbsp;
+                <span>View Count: {{doc.viewCount}}</span>&nbsp; &nbsp;
                 <span>Like Count: {{doc.voteCount}}</span>
               </div>
             <a-divider style="height: 2px; background-color:deepskyblue"/>
@@ -32,6 +32,14 @@
 						:innerHTML="html"
 					>
 					</div>
+          <div class="vote-div">
+            <a-button type="primary" shape="round" :size="'large'" @click="vote">
+              <template #icon>
+                <LikeOutlined/>
+              </template>
+              Like: &nbsp; {{doc.voteCount}}
+            </a-button>
+          </div>
 				</a-col>
       </a-row>
         <div class="doc">
@@ -162,6 +170,21 @@ export default defineComponent({
 					handleQueryContent(selectedKeys[0]);
 				}
 			};
+    
+      const vote = () =>{
+        console.log("doc.value", doc.value);
+        
+        axios.get("/doc/vote/" + doc.value.id).then((response) => {
+          const data = response.data;
+          if(data.success){
+            console.log("data.value:", data.value);
+            doc.value.voteCount++;
+          }else{
+            message.error(data.message);
+          }
+        });
+      };
+
 
 		onMounted(() => {
         handleQuery();
@@ -173,7 +196,8 @@ export default defineComponent({
         level1,
 				html,
 				onSelect,
-				defaultSelectedKeys
+				defaultSelectedKeys,
+        vote,
       }
 		}
 })
@@ -181,6 +205,10 @@ export default defineComponent({
 </script>
 
 <style>
+  .vote-div {
+    padding: 15px;
+    text-align: center;
+  }
   /* wangeditor默认样式, 参照: http://www.wangeditor.com/doc/pages/02-%E5%86%85%E5%AE%B9%E5%A4%84%E7%90%86/03-%E8%8E%B7%E5%8F%96html.html */
   /* table 样式 */
   .wangeditor table {
