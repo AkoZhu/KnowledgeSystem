@@ -121,6 +121,9 @@ create table `user` (
     primary key(`id`),
     unique key `login_name_unique` (`login_name`)
 ) engine=innodb default charset=utf8mb4 comment='User';
+
+insert into `user`(id, `login_name`, `name`, `password`) value(1, 'test', 'test',
+'7354a1d413535a6c0dc5c209e198d799')
 select * from `user`
 
 
