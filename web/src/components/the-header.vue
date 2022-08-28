@@ -13,11 +13,11 @@
       cancel-text="No"
       @confirm="logout" 
     >
-      <a class="login-menu" v-if="user.id">
+      <a class="login-menu" v-show="user.id">
         <span> <LogoutOutlined /> Logout</span>
       </a>
     </a-popconfirm>
-    <a class="login-menu" v-if="user.id">
+    <a class="login-menu" v-show="user.id">
       <span>Welcome: <UserOutlined /> {{user.name}}</span>
     </a>
 
@@ -29,13 +29,13 @@
         <a-menu-item key="/">
           <router-link to="/">Home</router-link>
         </a-menu-item>
-        <a-menu-item key="/admin/user">
+        <a-menu-item key="/admin/user" :style="user.id ? {} : {display:'none'}">
           <router-link to="/admin/user">User Management</router-link>
         </a-menu-item>
-        <a-menu-item key="/admin/ebook">
+        <a-menu-item key="/admin/ebook" :style="user.id ? {} : {display:'none'}">
           <router-link to="/admin/ebook">Ebooks Management</router-link>
         </a-menu-item>
-        <a-menu-item key="/admin/category">
+        <a-menu-item key="/admin/category" :style="user.id ? {} : {display:'none'}"> 
           <router-link to="/admin/category">Category Management</router-link>
         </a-menu-item>
         <a-menu-item key="/about">
