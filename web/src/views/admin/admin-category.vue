@@ -7,7 +7,7 @@
         <p>
           <a-form layout="inline" :model="param">
             <a-form-item>
-              <a-input v-model:value="param.name" placeholder="Name"></a-input>
+              <a-input v-model:value="param.name" placeholder="Category Name"></a-input>
             </a-form-item>
             <a-form-item>
               <a-button
@@ -169,6 +169,7 @@
       */
       const handleQuerySearch = (param: any) => {
         loading.value = true;
+        console.log("param.name:", param.name);
         axios.get("/category/list", {
           params:{
             name:param.name
@@ -178,7 +179,7 @@
             const data = response.data;
             if(data.success){
               categorys.value = data.content.list;
-
+              
               level1.value = [];
               level1.value = Tool.array2Tree(categorys.value, 0);
               console.log("Tree Structure:", level1);             

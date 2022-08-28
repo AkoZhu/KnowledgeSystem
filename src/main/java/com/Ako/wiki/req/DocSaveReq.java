@@ -1,26 +1,26 @@
 package com.Ako.wiki.req;
 
 import javax.validation.constraints.NotEmpty;
-
+import javax.validation.constraints.NotNull;
 
 import com.Ako.wiki.domain.Content;
 
 public class DocSaveReq {
     private Long id;
 
-    @NotEmpty(message = "[Ebook id] can't be null")
+    @NotNull(message = "[Ebook id] can't be null")
     private Long ebookId;
 
-    @NotEmpty(message = "[Parent id] can't be null")
+    @NotNull(message = "[Parent id] can't be null")
     private Long parent;
 
-    @NotEmpty(message = "[Name] can't be null")
+    @NotNull(message = "[Name] can't be null")
     private String name;
 
-    @NotEmpty(message = "[Order] can't be null")
+    @NotNull(message = "[Order] can't be null")
     private Integer sort;
 
-    @NotEmpty(message = "[Conten] can't be null")
+    @NotNull(message = "[Conten] can't be null")
     private String content;
 
     private Integer viewCount;

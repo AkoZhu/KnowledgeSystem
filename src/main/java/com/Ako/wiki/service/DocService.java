@@ -5,6 +5,7 @@ import com.Ako.wiki.domain.Doc;
 import com.Ako.wiki.domain.DocExample;
 import com.Ako.wiki.mapper.ContentMapper;
 import com.Ako.wiki.mapper.DocMapper;
+import com.Ako.wiki.mapper.DocMapperCust;
 import com.Ako.wiki.req.DocQueryReq;
 import com.Ako.wiki.req.DocSaveReq;
 import com.Ako.wiki.resp.DocQueryResp;
@@ -34,6 +35,9 @@ public class DocService {
 
     @Resource
     private SnowFlake snowFlake;
+
+    @Resource
+    private DocMapperCust docMapperCust;
 
     private static final Logger LOG = LoggerFactory.getLogger(DocService.class);
 
@@ -107,6 +111,8 @@ public class DocService {
         if(ObjectUtils.isEmpty(req.getId())){
             // Add
             doc.setId(snowFlake.nextId());
+            doc.setViewCount(0);
+            doc.setVoteCount(0);
             docMapper.insert(doc);
             content.setId(doc.getId());
             contentMapper.insert(content);
@@ -142,6 +148,8 @@ public class DocService {
 
     public String fileContent(Long id){
         Content content = contentMapper.selectByPrimaryKey(id);
+        // Increase view count by 1.
+        docMapperCust.increaseViewCount(id);
         if(content == null) return "";
         return content.getContent();
     }
