@@ -20,6 +20,14 @@
 					</a-tree>    
         </a-col>
         <a-col :span="18">
+          <div>
+            <h2>{{doc.name}}</h2>
+              <div>
+                <span>View Count: {{doc.viewCount}}</span> &nbsp;&nbsp;
+                <span>Like Count: {{doc.voteCount}}</span>
+              </div>
+            <a-divider style="height: 2px; background-color:deepskyblue"/>
+          </div>
 					<div class='wangeditor'
 						:innerHTML="html"
 					>
@@ -90,7 +98,7 @@ export default defineComponent({
             const data = response.data;
             if(data.success){
               docs.value = data.content;
-              console.log("Original Data:", doc.value);
+              console.log("Original Data:", docs.value);
 
               level1.value = [];
               level1.value = Tool.array2Tree(docs.value, 0);
@@ -99,7 +107,9 @@ export default defineComponent({
 								// Set this node as selected.
 								defaultSelectedKeys.value = [level1.value[0].id];
 								// Search the content of this selected node.
-								handleQueryContent(level1.value[0].id)
+								handleQueryContent(level1.value[0].id);
+                // Show slected doc info
+                doc.value = level1.value[0];
 							}
             }else{
               message.error(data.message);
@@ -142,8 +152,13 @@ export default defineComponent({
 
 			const onSelect = (selectedKeys: any, info: any) =>{
 				console.log('selected', selectedKeys, info);
+        console.log("selectKeys[0]", selectedKeys[0]);
 				if(Tool.isNotEmpty(selectedKeys)){
-					// load content
+          // Load info for current node.
+          doc.value = info.selectedNodes[0];
+          
+          console.log("info.selectedNodes[0]",info.selectedNodes[0])
+          // load content
 					handleQueryContent(selectedKeys[0]);
 				}
 			};
@@ -154,6 +169,7 @@ export default defineComponent({
 
 		return {
         // docs,
+        doc,
         level1,
 				html,
 				onSelect,
