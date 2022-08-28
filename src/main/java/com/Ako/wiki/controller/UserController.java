@@ -97,4 +97,16 @@ public class UserController {
         resp.setContent(userLoginResp);
         return resp;
     }
+
+    @GetMapping("/logout/{token}")
+    public CommonResp logout(@PathVariable String token) {
+        // Don't let the whole information, the User class show in Controller.
+        CommonResp resp = new CommonResp<>();
+
+        // Remove token from redis. 
+        redisTemplate.delete(token);
+        LOG.info("Remove token: {} from redis", token);
+        return resp;
+    }
+
 }

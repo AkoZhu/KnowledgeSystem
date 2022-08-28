@@ -1,15 +1,26 @@
 <template>
   <a-layout-header class="header">
     <div class="logo" />
-    <a class="login-menu" v-if="user.id">
-      <span>Welcome: <UserOutlined /> {{user.name}}</span>
-    </a>
     <a class="login-menu" 
       @click="showLoginModal" 
       v-if="!user.id"
     >
-      <span> <UserOutlined/> Login</span>
+      <span> <LoginOutlined/> Login</span>
     </a>
+    <a-popconfirm 
+      title="Confirm to logout ?" 
+      ok-text="Yes"
+      cancel-text="No"
+      @confirm="logout" 
+    >
+      <a class="login-menu" v-if="user.id">
+        <span> <LogoutOutlined /> Logout</span>
+      </a>
+    </a-popconfirm>
+    <a class="login-menu" v-if="user.id">
+      <span>Welcome: <UserOutlined /> {{user.name}}</span>
+    </a>
+
     <a-menu
         theme="dark"
         mode="horizontal"
@@ -58,7 +69,7 @@
 import axios from 'axios';
 import { message } from 'ant-design-vue';
 import { computed, defineComponent, ref } from 'vue';
-import { UserOutlined } from '@ant-design/icons-vue';
+import { UserOutlined, LogoutOutlined, LoginOutlined} from '@ant-design/icons-vue';
 import store from '@/store';
 
 declare let hexMd5: any;
@@ -67,6 +78,8 @@ declare let KEY: any;
 export default defineComponent({
   name: 'the-header',
   components:{
+    LoginOutlined,
+    LogoutOutlined,
     UserOutlined
   },
   setup() {
@@ -102,6 +115,21 @@ export default defineComponent({
         }
       });
     };
+
+    // log out
+    const logout = () => {
+      console.log("Start logout.");
+      axios.get("/user/logout/" + user.value.token).then((response) =>{
+        const data = response.data;
+        if(data.success){
+          message.success("Log in successfully!");
+          // remove user in sessionStorage.
+          store.commit("setUser", {});
+        }else{
+          message.error(data.message);
+        }
+      });
+    };
     
     return {
       loginModalVisible,
@@ -109,7 +137,9 @@ export default defineComponent({
       showLoginModal,
       loginUser,
       login,
-      user
+      user,
+
+      logout,
     }
 
   }
@@ -120,5 +150,6 @@ export default defineComponent({
   .login-menu {
     float: right !important;
     color:white;
+    padding-left: 10px;
   }
 </style>
