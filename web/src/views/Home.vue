@@ -26,6 +26,33 @@
         <!-- Content -->
         <div class="welcome" v-show="isWelcome">
           <h1>Welcome to Ebook Wiki!!</h1>
+          <a-list
+              item-layout="vertical"
+              size="large"
+              :grid= "{ gutter: 20, column: 3 }"
+              :data-source="ebooks"
+          >
+            <template #renderItem="{ item }">
+              <a-list-item key="item.name">
+                <template #actions>
+                <span v-for="{ type, text } in actions" :key="type">
+                  <component :is="type" style="margin-right: 8px" />
+                  {{ text }}
+                </span>
+                </template>
+                <a-list-item-meta :description="item.description">
+                  <template #title>
+                    <router-link :to="'/doc?ebookId=' + item.id">
+                      {{item.name}}
+                      <!-- <a :href="item.href">{{ item.name }}</a> -->
+                    </router-link>
+                  </template>
+                  <template #avatar><a-avatar :src="item.cover" /></template>
+                </a-list-item-meta>
+              </a-list-item>
+            </template>
+
+          </a-list>
         </div>
         <a-list 
           v-show="!isWelcome"
@@ -118,25 +145,43 @@ export default defineComponent({
     let categoryId2 = 0;
 
     const handleQueryEbook = () => {
-      axios.get("/ebook/list", {
-        params: {
-          page: 1,
-          size: 100,
-          categoryId2: categoryId2
-        }
-      }).then(function (response) {
-        const data = response.data;
-        ebooks.value = data.content.list;
-        // ebooks1.books = data.content.list;
-        // console.log(response); // We use axios.interseptor to print response.
-        // We also delete setup and onMounted log.  
-      });
+      if (!isWelcome.value) {
+        axios.get("/ebook/list", {
+          params: {
+            page: 1,
+            size: 100,
+            categoryId2: categoryId2
+          }
+        }).then(function (response) {
+          const data = response.data;
+          ebooks.value = data.content.list;
+          console.log("ebooks: ", ebooks);
+          // ebooks1.books = data.content.list;
+          // console.log(response); // We use axios.interceptor to print response.
+          // We also delete setup and onMounted log.
+        });
+      }else{
+        axios.get("/ebook/list", {
+          params: {
+            page: 1,
+            size: 100,
+          }
+        }).then(function (response) {
+          const data = response.data;
+          ebooks.value = data.content.list;
+          console.log("ebooks: ", ebooks);
+          // ebooks1.books = data.content.list;
+          // console.log(response); // We use axios.interceptor to print response.
+          // We also delete setup and onMounted log.
+        });
+      }
     };
 
     const handleClick = (value: any) => {
       console.log("menu click", value)
       if(value.key === "welcome"){
         isWelcome.value = true;
+        handleQueryEbook();
       }else{
         categoryId2 = value.key;
         isWelcome.value = false;
@@ -147,6 +192,7 @@ export default defineComponent({
     
     onMounted(() => {
       handleQueryCategory();
+      handleQueryEbook();
       // console.log("onMounted1112");
       // function (response) {} is the same as (response) => {}
     })

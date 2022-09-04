@@ -29,6 +29,9 @@
         <a-menu-item key="/">
           <router-link to="/">Home</router-link>
         </a-menu-item>
+        <a-menu-item key="/about" >
+          <router-link to="/about">About</router-link>
+        </a-menu-item>
         <a-menu-item key="/admin/user" :style="user.id ? {} : {display:'none'}">
           <router-link to="/admin/user">User Management</router-link>
         </a-menu-item>
@@ -37,9 +40,6 @@
         </a-menu-item>
         <a-menu-item key="/admin/category" :style="user.id ? {} : {display:'none'}"> 
           <router-link to="/admin/category">Category Management</router-link>
-        </a-menu-item>
-        <a-menu-item key="/about" >
-          <router-link to="/about">About</router-link>
         </a-menu-item>
     </a-menu>
 
