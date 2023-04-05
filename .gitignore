@@ -35,3 +35,4 @@ build/
 /temp/jdk-8u333-linux-x64.tar.gz
 
 .DS_Store
+/src/main/resources/application.properties
