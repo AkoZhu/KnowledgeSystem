@@ -1,6 +1,6 @@
 <template>
   <a-layout-header class="header">
-    <div class="logo" />
+    <div class="logo">e-Books Wiki</div>
     <a class="login-menu" 
       @click="showLoginModal" 
       v-if="!user.id"
@@ -154,5 +154,12 @@ export default defineComponent({
     float: right !important;
     color:white;
     padding-left: 10px;
+  }
+  .logo{
+    width: 120px;
+    height: 31px;
+    float:left;
+    color:white;
+    font-size:18px;
   }
 </style>
