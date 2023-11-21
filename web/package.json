@@ -14,7 +14,7 @@
     "@wangeditor/editor": "^5.1.14",
     "@wangeditor/editor-for-vue": "^5.1.12",
     "ant-design-vue": "^3.2.11",
-    "axios": "^0.21.2",
+    "axios": "^1.6.0",
     "i18next": "^21.9.1",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
